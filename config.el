@@ -85,15 +85,14 @@
 
 (after! vertico
   (map! :map vertico-map
-        ;; Emacs-like file path navigation
-        "C-l"   #'vertico-directory-up
-        "C-j"   #'+vertico/enter-or-preview
         ;; C-SPC for embark-act
-        ;; "C-;"   #'+vertico/embark-preview
-        ;; "C-SPC" #'embark-act
-        ;;
-        ;; "C-S-SPC" #'embark-act-all
-        )
+        "C-SPC" #'embark-act
+        "C-S-SPC" #'embark-act-all
+        "C-;"   #'+vertico/embark-preview ;; just in case
+        ;; Emacs-like file path navigation
+        "C-l" (cmds! (eq 'file (vertico--metadata-get 'category)) #'vertico-directory-up)
+        "C-j" (cmds! (eq 'file (vertico--metadata-get 'category)) #'+vertico/enter-or-preview
+                     #'+vertico/embark-preview))
   (setq vertico-cycle nil
         vertico-count 11))
 
