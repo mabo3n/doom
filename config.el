@@ -109,7 +109,7 @@
 ;;         :desc "mark"    "SPC"   #'mark
 ;;         ))
 
-(after! dired!
+(after! dired
   (map! :leader "f j" #'dired-jump))
 
 (setq display-line-numbers-type nil)
