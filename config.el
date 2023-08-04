@@ -97,6 +97,11 @@
   (setq vertico-cycle nil
         vertico-count 11))
 
+(after! company
+  (map! :map company-active-map
+        "C-h" #'company-show-location
+        "C-j" #'company-show-doc-buffer))
+
 ;; (after! embark
 ;;   (map! :map embark-general-map
 ;;         ;; Swap SPC and C-SPC in embark keymaps
