@@ -113,7 +113,5 @@
 
 (setq display-line-numbers-type nil)
 
-;; TODO Check how undo works and with undo-tree is available
-
 ;; TODO How to reopen documentation buffer? (SPC r w)
 ;; And is it possible to navigate in history ([ ])
