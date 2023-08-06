@@ -96,6 +96,9 @@
   (setq vertico-cycle nil
         vertico-count 11))
 
+(after! embark
+  (setq embark-help-key "C-SPC"))
+
 (after! company
   (map! :map company-active-map
         "C-h" #'company-show-location
