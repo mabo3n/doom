@@ -124,17 +124,10 @@
         "C-h" #'company-show-location
         "C-j" #'company-show-doc-buffer))
 
-;; (after! embark
-;;   (map! :map embark-general-map
-;;         ;; Swap SPC and C-SPC in embark keymaps
-;;         :desc "<leader>" "C-SPC" #'embark-select
-;;         :desc "mark"    "SPC"   #'mark
-;;         ))
-
 ;; Restore `s' to yank surround instead of evil snipe
 (when (modulep! :editor evil +everywhere)
   (remove-hook 'doom-first-input-hook #'evil-snipe-mode)
-  (map! :v "S" nil ;; this one is not working dunno way
+  (map! :v "S" nil ;; this one is not working dunno why
         :v "s" #'evil-surround-region))
 
 (after! dired
