@@ -86,9 +86,9 @@
 (after! vertico
   (map! :map vertico-map
         ;; C-SPC for embark-act
-        "C-SPC" #'embark-act
+        "C-SPC"   #'embark-act
         "C-S-SPC" #'embark-act-all
-        "C-;"   #'+vertico/embark-preview ;; just in case
+        "C-;"     #'+vertico/embark-preview ;; just in case
         ;; Emacs-like file path navigation
         "C-l" (cmds! (eq 'file (vertico--metadata-get 'category)) #'vertico-directory-up)
         "C-j" (cmds! (eq 'file (vertico--metadata-get 'category)) #'+vertico/enter-or-preview
@@ -113,5 +113,4 @@
 
 (setq display-line-numbers-type nil)
 
-;; TODO How to reopen documentation buffer? (SPC r w)
-;; And is it possible to navigate in history ([ ])
+;; TODO Find alternative to symbol highlight and edit (SPC s e)
