@@ -96,6 +96,23 @@
   (setq vertico-cycle nil
         vertico-count 11))
 
+(after! consult
+  ;; Overriding config to use C-j as preview key instead of C-SPC
+  (setq consult--customize-alist nil)
+  (consult-customize
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file
+   +default/search-project +default/search-other-project
+   +default/search-project-for-symbol-at-point
+   +default/search-cwd +default/search-other-cwd
+   +default/search-notes-for-symbol-at-point
+   +default/search-emacsd
+   consult--source-recent-file consult--source-project-recent-file consult--source-bookmark
+   :preview-key "C-j")
+  (consult-customize
+   consult-theme
+   :preview-key (list "C-j" :debounce 0.5 'any)))
+
 (after! embark
   (setq embark-help-key "C-SPC"))
 
