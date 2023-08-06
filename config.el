@@ -92,7 +92,10 @@
         ;; Emacs-like file path navigation
         "C-l" (cmds! (eq 'file (vertico--metadata-get 'category)) #'vertico-directory-up)
         "C-j" (cmds! (eq 'file (vertico--metadata-get 'category)) #'+vertico/enter-or-preview
-                     #'+vertico/embark-preview))
+                     #'+vertico/embark-preview)
+        ;; C-n and C-p are bound to next/prev by default but these are not
+        "C-M-n"   #'vertico-next-group
+        "C-M-p"   #'vertico-previous-group)
   (setq vertico-cycle nil
         vertico-count 11))
 
