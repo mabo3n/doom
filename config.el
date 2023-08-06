@@ -131,6 +131,12 @@
 ;;         :desc "mark"    "SPC"   #'mark
 ;;         ))
 
+;; Restore `s' to yank surround instead of evil snipe
+(when (modulep! :editor evil +everywhere)
+  (remove-hook 'doom-first-input-hook #'evil-snipe-mode)
+  (map! :v "S" nil ;; this one is not working dunno way
+        :v "s" #'evil-surround-region))
+
 (after! dired
   (map! :leader "f j" #'dired-jump))
 
