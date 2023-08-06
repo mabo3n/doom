@@ -130,6 +130,11 @@
   (map! :v "S" nil ;; this one is not working dunno why
         :v "s" #'evil-surround-region))
 
+;; Don't prompt if commit summary line is "too long"
+(after! git-commit
+  (setq git-commit-style-convention-checks (cl-remove 'overlong-summary-line
+                                             git-commit-style-convention-checks)))
+
 (after! dired
   (map! :leader "f j" #'dired-jump))
 
