@@ -138,6 +138,11 @@
 (after! dired
   (map! :leader "f j" #'dired-jump))
 
+(map! :when (modulep! :ui workspaces)
+      :leader
+      :desc "Restore last session" "TAB r" #'+workspace/restore-last-session
+      :desc "Rename workspace"     "TAB R" #'+workspace/rename)
+
 (setq display-line-numbers-type nil)
 
 ;; TODO Find alternative to symbol highlight and edit (SPC s e)
