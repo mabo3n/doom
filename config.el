@@ -140,8 +140,10 @@
 
 (map! :when (modulep! :ui workspaces)
       :leader
-      :desc "Restore last session" "TAB r" #'+workspace/restore-last-session
-      :desc "Rename workspace"     "TAB R" #'+workspace/rename)
+      :desc "Restore last session" "TAB r"   #'+workspace/restore-last-session
+      :desc "Rename workspace"     "TAB R"   #'+workspace/rename
+      :desc "Switch workspace"     "TAB TAB" #'+workspace/switch-to
+      :desc "Display tab bar"      "TAB ."   #'+workspace/display)
 
 (setq display-line-numbers-type nil)
 
