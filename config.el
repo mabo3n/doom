@@ -74,6 +74,10 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+
+(defconst mabo3n/workp t
+  "Non nil if I'm in my work setup")
+
 (setq doom-theme 'doom-nord-light)
 ;; (doom/reset-font-size)
 ;; (doom/increase-font-size 2)
