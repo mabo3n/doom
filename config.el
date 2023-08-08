@@ -139,6 +139,15 @@
   (setq git-commit-style-convention-checks (cl-remove 'overlong-summary-line
                                              git-commit-style-convention-checks)))
 
+(when mabo3n/workp
+  (after! browse-at-remote
+    ;; Teach browser-at-remote to handle custom ssh host
+    ;; of my private doom config
+    (add-to-list 'browse-at-remote-remote-type-regexps
+                 `(:host ,(rx bol "doom-cfg-host" eol)
+                   :type "github"
+                   :actual-host "github.com"))))
+
 (after! dired
   (map! :leader "f j" #'dired-jump))
 
