@@ -148,3 +148,19 @@
 (setq display-line-numbers-type nil)
 
 ;; TODO Find alternative to symbol highlight and edit (SPC s e)
+
+;; C# stuff
+
+;; Make eglot know that csharp-tree-sitter-mode is also csharp.
+;; Find the csharp entry in alist and add new mode there
+(when (and (modulep! :tools lsp +eglot)
+           (modulep! :lang csharp +lsp))
+  (after! eglot
+    (let* ((csharp-entry (assoc 'csharp-mode
+                                eglot-server-programs
+                                (lambda (entry mode)
+                                  (and (listp entry)
+                                       (cl-member mode entry)))))
+           (mode 'csharp-tree-sitter-mode))
+      (unless (cl-member mode (car csharp-entry))
+        (push mode (car csharp-entry))))))
