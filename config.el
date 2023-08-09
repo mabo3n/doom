@@ -83,7 +83,7 @@
 ;; (doom/increase-font-size 2)
 
 (use-package! which-key
-  :init (setq which-key-idle-delay 0.15))
+  :init (setq which-key-idle-delay 0.4))
 
 (map! :leader "SPC" nil) ;; #'execute-extended-command)
 
