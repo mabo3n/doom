@@ -141,32 +141,24 @@
 
 (when mabo3n/workp
   (after! browse-at-remote
-    ;; Teach browser-at-remote to handle custom ssh host
+    ;; Teach browse-at-remote to handle custom ssh host
     ;; of my private doom config
     (add-to-list 'browse-at-remote-remote-type-regexps
                  `(:host ,(rx bol "doom-cfg-host" eol)
                    :type "github"
                    :actual-host "github.com"))
+    ;; HACK browse-at-remote to generate valid URLs to Azure repos
     (add-to-list 'browse-at-remote-remote-type-regexps
                  `(:host ,(rx bol "ssh.dev.azure.com" eol)
                    :type "ado"
-                   :actual-host "dev.azure.com"
-                   ))
+                   :actual-host "dev.azure.com"))
 
-    ;; Remote URL:
-    ;; git@ssh.dev.azure.com:v3/AMBEV-SA/AMBEVTECH-LOGCO-FULFILLMENT/     NEXWAY-FULFILLMENT-LINEHAUL
-    ;; Browser url (expected one)
-    ;; https://dev.azure.com   /AMBEV-SA/AMBEVTECH-LOGCO-FULFILLMENT/_git/NEXWAY-FULFILLMENT-LINEHAUL?version=GBdevelop&path=/CHANGELOG.md
-    ;; Generated link with custom ado host: "ssh.dev.azure.com"
-    ;; https://ssh.dev.azure.com        /AMBEVTECH-LOGCO-FULFILLMENT/_git/NEXWAY-FULFILLMENT-LINEHAUL?version=GBdevelop&path=/CHANGELOG.md
-    ;; Generated link with custom ado host: "ssh.dev.azure.com" and :actual-host "dev.azure.com"
-    ;; https://dev.azure.com            /AMBEVTECH-LOGCO-FULFILLMENT/_git/NEXWAY-FULFILLMENT-LINEHAUL?version=GBdevelop&path=/CHANGELOG.md
-    ;; Generated link with custom ado host: "ssh.dev.azure.com" and :actual-host "dev.azure.com/AMBEV-SA"
-    ;; https://dev.azure.com   /AMBEV-SA                            /_git/AMBEVTECH-LOGCO-FULFILLMENT?version=GBdevelop&path=/CHANGELOG.md
-    ;; Organization (AMBEV-SA) becomes the project (..LOGCO..), and the project becomes the repo (LINEHAUL)
-    ))
-
-(setq browse-at-remote-remote-type-regexps (cdr browse-at-remote-remote-type-regexps))
+    (defadvice! mabo3n/fix-browse-at-remote-ado-url-a (fn &rest args)
+      "Append organization to host to generated URLs."
+      :around #'browse-at-remote-ado-format-url
+      (s-replace "//dev.azure.com"
+                 "//dev.azure.com/AMBEV-SA"
+                 (apply fn args)))))
 
 (after! dired
   (map! :leader "f j" #'dired-jump))
