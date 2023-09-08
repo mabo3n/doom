@@ -192,6 +192,15 @@
 ;; org-roam stuff
 
 (when (modulep! :lang org +roam2)
+  (map! :leader
+        :desc "Find node"        "n r n" #'org-roam-node-find
+        :desc "Capture to node"  "n r c" #'org-roam-capture
+        :desc "Add alias"        "n r a" #'org-roam-alias-add
+        :desc "Remove alias"     "n r A" #'org-roam-alias-remove
+        :desc "Add tag"          "n r t" #'org-roam-tag-add
+        :desc "Remove tag"       "n r T" #'org-roam-tag-remove
+        :desc "Open random node" "n r #" #'org-roam-node-random)
+
   (setq org-roam-directory (expand-file-name "~/org/roam/")
         ;; override default template to add created/modified/filetags props
         org-roam-capture-templates
