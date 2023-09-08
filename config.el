@@ -86,6 +86,8 @@
 
 (map! :leader "SPC" nil) ;; #'execute-extended-command)
 
+(setq show-trailing-whitespace t)
+
 (after! vertico
   (map! :map vertico-map
         ;; C-SPC for embark-act
