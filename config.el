@@ -172,8 +172,6 @@
 
 (setq display-line-numbers-type nil)
 
-;; TODO Find alternative to symbol highlight and edit (SPC s e)
-
 ;; C# stuff
 
 ;; Make eglot know that csharp-tree-sitter-mode is also csharp.
@@ -189,6 +187,9 @@
            (mode 'csharp-tree-sitter-mode))
       (unless (cl-member mode (car csharp-entry))
         (push mode (car csharp-entry))))))
+
+
+;; org-roam stuff
 
 (when (modulep! :lang org +roam2)
   (setq org-roam-directory (expand-file-name "~/org/roam/")
