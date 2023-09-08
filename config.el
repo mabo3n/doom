@@ -189,3 +189,34 @@
            (mode 'csharp-tree-sitter-mode))
       (unless (cl-member mode (car csharp-entry))
         (push mode (car csharp-entry))))))
+
+(when (modulep! :lang org +roam2)
+  (setq org-roam-directory (expand-file-name "~/org/roam/")
+        ;; override default template to add created/modified/filetags props
+        org-roam-capture-templates
+        `(("d" "default" plain "\n* TODO roam entry: ${title}%?"
+           :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                              ,(concat "#+title: ${title}\n"
+                                       "#+created:       %U\n"
+                                       "#+last_modified: %U\n"
+                                       "#+filetags:\n"))
+           :unnarrowed t)))
+
+  ;; Update "last_modified" date when saving buffer
+  ;; https://org-roam.discourse.group/t/update-a-field-last-modified-at-save/321
+  (defun mabo3n/org-roam-set-time-stamp-vars ()
+    "Set time-stamp variables to auto update last_modified property."
+    (when (derived-mode-p 'org-mode)
+      (require 'time-stamp)
+      (setq-local time-stamp-active t
+                  time-stamp-line-limit 24
+                  time-stamp-start "#\\+last_modified:[ ]*"
+                  time-stamp-end "$"
+                  time-stamp-format "\[%Y-%m-%d %3a %H:%M\]")))
+
+  (defun mabo3n/org-roam-timestamp-on-save ()
+    "Call `time-stamp' function if in `org-mode'."
+    (when (derived-mode-p 'org-mode)
+      (time-stamp)))
+  (add-hook 'org-mode-hook #'mabo3n/org-roam-set-time-stamp-vars)
+  (add-hook 'before-save-hook #'mabo3n/org-roam-timestamp-on-save))
