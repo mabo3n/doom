@@ -254,3 +254,9 @@
       (time-stamp)))
   (add-hook 'org-mode-hook #'mabo3n/org-roam-set-time-stamp-vars)
   (add-hook 'before-save-hook #'mabo3n/org-roam-timestamp-on-save))
+
+;; biblio stuff
+
+(when (modulep! :tools biblio)
+  (setq org-cite-global-bibliography '("~/docs/My Library.bib")
+        citar-bibliography org-cite-global-bibliography))
