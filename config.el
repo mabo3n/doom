@@ -147,18 +147,35 @@
                  `(:host ,(rx bol "doom-cfg-host" eol)
                    :type "github"
                    :actual-host "github.com"))
-    ;; HACK browse-at-remote to generate valid URLs to Azure repos
+
+    ;; HACK browse-at-remote to generate valid URLs to Azure repos ---------------------------
+
+    ;; Link to branches by default
+    (setq browse-at-remote-prefer-symbolic t)
+
     (add-to-list 'browse-at-remote-remote-type-regexps
                  `(:host ,(rx bol "ssh.dev.azure.com" eol)
                    :type "ado"
                    :actual-host "dev.azure.com"))
 
-    (defadvice! mabo3n/fix-browse-at-remote-ado-url-a (fn &rest args)
+    (defadvice! mabo3n/fix-browse-at-remote-ado-url-host-a (fn &rest args)
       "Append organization to host to generated URLs."
       :around #'browse-at-remote-ado-format-url
       (s-replace "//dev.azure.com"
                  "//dev.azure.com/AMBEV-SA"
-                 (apply fn args)))))
+                 (apply fn args)))
+
+    (defadvice! mabo3n/fix-browse-at-remote-ado-url-location-a (fn &rest args)
+      "Replace 'GB' with 'GC' in generated URLs where location matches a commit hash."
+      :around #'browse-at-remote--format-region-url-as-ado
+      (let* ((git-ref  (cadr args))
+             (commit-p (string-match-p "\\`[0-9a-fA-F]\\{40\\}\\'" git-ref))
+             (url      (apply fn args)))
+        (if commit-p
+            (s-replace "?version=GB" "?version=GC" url)
+          url)))
+    ;; ---------------------------------------------------------------------------------------
+    ))
 
 (after! dired
   (map! :leader "f j" #'dired-jump))
