@@ -205,8 +205,9 @@
    ;; org-hide-emphasis-markers t
    org-image-actual-width nil)
 
+  (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
+
   (setq-default
-   org-default-notes-file (expand-file-name "notes" org-directory)
    org-archive-location ".archive.%s::"
    org-archive-file-header-format
    (concat ";;; -*- mode: org; -*-\n"
