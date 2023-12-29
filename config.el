@@ -78,6 +78,8 @@
 (defconst mabo3n/workp nil
   "Non nil if I'm in my work setup")
 
+(load! "lisp/init-utils")
+
 ;; (doom/reset-font-size)
 ;; (doom/increase-font-size 2)
 
