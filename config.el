@@ -75,7 +75,7 @@
 ;; they are implemented.
 
 
-(defconst mabo3n/workp t
+(defconst mabo3n/workp nil
   "Non nil if I'm in my work setup")
 
 ;; (doom/reset-font-size)
