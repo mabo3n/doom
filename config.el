@@ -74,6 +74,8 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(defconst mabo3n/home-dir (expand-file-name "~/")
+  "User home directory (default ~/).")
 
 (defconst mabo3n/workp nil
   "Non nil if I'm in my work setup")
