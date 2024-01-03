@@ -25,5 +25,32 @@
          "Archived entries from file =%s=:\n"
          "\n"))
 
+;;; org-capture
+
+(setq org-capture-templates
+      '(("t" "Personal todo" entry
+         (file+headline +org-capture-todo-file "Inbox")
+         "* [ ] %?\n%i\n%a" :clock-resume t :kill-buffer t)
+        ("n" "Personal notes" entry
+         (file+headline +org-capture-notes-file "Inbox")
+         "* %u %?\n%i\n%a" :clock-resume t :kill-buffer t)
+        ("j" "Journal" entry
+         (file+olp+datetree +org-capture-journal-file)
+         "* %U %?\n%i\n%a" :clock-resume t :kill-buffer t)
+        ("p" "Templates for projects")
+        ("pt" "Project-local todo" entry
+         (file+headline +org-capture-project-todo-file "Inbox")
+         "* TODO %?\n%i\n%a" :clock-resume t :kill-buffer t)
+        ("pn" "Project-local notes" entry
+         (file+headline +org-capture-project-notes-file "Inbox")
+         "* %U %?\n%i\n%a" :clock-resume t :kill-buffer t)
+        ("pc" "Project-local changelog" entry
+         (file+headline +org-capture-project-changelog-file "Unreleased")
+         "* %U %?\n%i\n%a" :clock-resume t :kill-buffer t)
+        ("o" "Centralized templates for projects")
+        ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :clock-resume nil)
+        ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :clock-resume t :kill-buffer t)
+        ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :clock-resume t)))
+
 (provide 'init-org)
 ;;; init-org.el ends here
