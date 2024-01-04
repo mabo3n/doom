@@ -74,9 +74,13 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(defconst mabo3n/home-dir (expand-file-name "~/")
+  "User home directory (default ~/).")
 
 (defconst mabo3n/workp t
   "Non nil if I'm in my work setup")
+
+(load! "lisp/init-utils")
 
 ;; (doom/reset-font-size)
 ;; (doom/increase-font-size 2)
@@ -85,6 +89,8 @@
   :init (setq which-key-idle-delay 0.4))
 
 (map! :leader "SPC" nil) ;; #'execute-extended-command)
+
+(setq show-trailing-whitespace t)
 
 (after! vertico
   (map! :map vertico-map
@@ -189,8 +195,6 @@
 
 (setq display-line-numbers-type nil)
 
-;; TODO Find alternative to symbol highlight and edit (SPC s e)
-
 ;; C# stuff
 
 ;; Make eglot know that csharp-tree-sitter-mode is also csharp.
@@ -206,3 +210,56 @@
            (mode 'csharp-tree-sitter-mode))
       (unless (cl-member mode (car csharp-entry))
         (push mode (car csharp-entry))))))
+
+;; org stuff
+
+(when (modulep! :lang org)
+  (load! "lisp/init-org"))
+
+;; org-roam stuff
+
+(when (modulep! :lang org +roam2)
+  (map! :leader
+        :desc "Find node"        "n r n" #'org-roam-node-find
+        :desc "Capture to node"  "n r c" #'org-roam-capture
+        :desc "Add alias"        "n r a" #'org-roam-alias-add
+        :desc "Remove alias"     "n r A" #'org-roam-alias-remove
+        :desc "Add tag"          "n r t" #'org-roam-tag-add
+        :desc "Remove tag"       "n r T" #'org-roam-tag-remove
+        :desc "Open random node" "n r #" #'org-roam-node-random)
+
+  (setq org-roam-directory (expand-file-name "~/org/roam/")
+        ;; override default template to add created/modified/filetags props
+        org-roam-capture-templates
+        `(("d" "default" plain "\n* TODO roam entry: ${title}%?"
+           :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                              ,(concat "#+title: ${title}\n"
+                                       "#+created:       %U\n"
+                                       "#+last_modified: %U\n"
+                                       "#+filetags:\n"))
+           :unnarrowed t)))
+
+  ;; Update "last_modified" date when saving buffer
+  ;; https://org-roam.discourse.group/t/update-a-field-last-modified-at-save/321
+  (defun mabo3n/org-roam-set-time-stamp-vars ()
+    "Set time-stamp variables to auto update last_modified property."
+    (when (derived-mode-p 'org-mode)
+      (require 'time-stamp)
+      (setq-local time-stamp-active t
+                  time-stamp-line-limit 24
+                  time-stamp-start "#\\+last_modified:[ ]*"
+                  time-stamp-end "$"
+                  time-stamp-format "\[%Y-%m-%d %3a %H:%M\]")))
+
+  (defun mabo3n/org-roam-timestamp-on-save ()
+    "Call `time-stamp' function if in `org-mode'."
+    (when (derived-mode-p 'org-mode)
+      (time-stamp)))
+  (add-hook 'org-mode-hook #'mabo3n/org-roam-set-time-stamp-vars)
+  (add-hook 'before-save-hook #'mabo3n/org-roam-timestamp-on-save))
+
+;; biblio stuff
+
+(when (modulep! :tools biblio)
+  (setq org-cite-global-bibliography '("~/docs/My Library.bib")
+        citar-bibliography org-cite-global-bibliography))
