@@ -183,22 +183,24 @@ Uses `mabo3n/backup-recent-files' with ARGS."
   (mabo3n/backup-file
    `(,(expand-file-name "org/" mabo3n/home-dir)) args))
 
-(defconst mabo3n/backup-dotspacemacs-default-commit-message
-  "<auto commit>"
+(defconst mabo3n/backup-pending-doom-config-commit-message
+  "<automatically backed up>"
   "Default commit message used by `mabo3n/backup-dotspacemacs-changes'.")
 
-(defun mabo3n/backup-dotspacemacs-files (&optional commit-msg)
-  "Commit and push to remote all dotspacemacs file changes.
+(defun mabo3n/backup-pending-doom-config (&optional commit-msg)
+  "Commit and push to remote all pending doom config changes.
 
 Optional COMMIT-MSG can be provided, using
-`mabo3n/backup-dotspacemacs-default-commit-message' as the default one."
+`mabo3n/backup-pending-doom-config-commit-message' as the default one."
   (interactive (list
                 (read-string
-                 (format "Commit message (default %s):\n"
-                         mabo3n/backup-dotspacemacs-default-commit-message))))
-  (let* ((default-directory dotspacemacs-directory)
+                 "Commit message:"
+                 mabo3n/backup-pending-doom-config-commit-message
+                 nil
+                 mabo3n/backup-pending-doom-config-commit-message)))
+  (let* ((default-directory doom-private-dir)
          (msg (or commit-msg
-                  mabo3n/backup-dotspacemacs-default-commit-message))
+                  mabo3n/backup-pending-doom-config-commit-message))
          (command (format (concat "git add ."
                                   " && git commit -m \"%s\""
                                   " && git push")
