@@ -138,7 +138,7 @@ about rclone's copy command behavior."
   (let* ((file (or file
                    (and (called-interactively-p 'any)
                         (buffer-file-name
-                         (consult-find nil (or (dired-get-filename nil t)
+                         (consult-find nil (or (dired-get-filename t t)
                                                (buffer-name)
                                                default-directory))))))
          (default-args mabo3n/backup-files-default-args)
