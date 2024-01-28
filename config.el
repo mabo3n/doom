@@ -173,6 +173,9 @@
 (after! dired
   (map! :leader "f j" #'dired-jump))
 
+(map! :leader
+      :desc "Switch to last buffer" "b `" #'evil-switch-to-windows-last-buffer)
+
 (map! :when (modulep! :ui workspaces)
       :leader
       :desc "Restore last session" "TAB r"   #'+workspace/restore-last-session
