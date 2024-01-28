@@ -201,14 +201,5 @@ Optional COMMIT-MSG can be provided, using
                           msg)))
     (mabo3n/backup-files--run-command command)))
 
-;; ;; TODO Bind backup keys to something
-;; (spacemacs/declare-prefix "o b" "mabo3n/backup")
-
-;; (spacemacs/set-leader-keys
-;;   "o b f" #'mabo3n/backup-file
-;;   "o b o" #'mabo3n/backup-org-files
-;;   "o b d" #'mabo3n/backup-recent-dotfiles
-;;   "o b C-c" #'mabo3n/backup-pending-doom-config)
-
 (provide 'init-backup)
 ;;; init-backup.el ends here
