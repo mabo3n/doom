@@ -137,11 +137,10 @@ about rclone's copy command behavior."
   (interactive "i\nP")
   (let* ((file (or file
                    (and (called-interactively-p 'any)
-                        (helm-read-file-name
-                         "File: "
-                         :initial-input (or (dired-get-filename nil t)
-                                            (buffer-file-name)
-                                            default-directory)))))
+                        (buffer-file-name
+                         (consult-find nil (or (dired-get-filename nil t)
+                                               (buffer-name)
+                                               default-directory))))))
          (default-args mabo3n/backup-files-default-args)
          (args (or (and (consp current-prefix-arg)
                         (list (read-string
