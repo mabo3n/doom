@@ -81,6 +81,8 @@
   "Non nil if I'm in my work setup")
 
 (load! "lisp/init-utils")
+(load! "lisp/init-backup")
+
 
 ;; (doom/reset-font-size)
 ;; (doom/increase-font-size 2)

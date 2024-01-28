@@ -1,14 +1,8 @@
-;;; init-backup.el --- Custom backup functions -*- lexical-binding: t -*-
+;;; init-backup.el --- Custom functions to backup my files to the cloud -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
 (require 'init-utils)
-;; (require 'subr-x)
-;; (require 'dash)
-;; (require 'simple)
-;; (require 'core-load-paths)
-;; (require 'core-dotspacemacs)
-;; (require 'helm)
 
 (defconst mabo3n/backup-files-remote-root "d:"
   "Where `mabo3n/backup-file' moves files to.")
@@ -207,13 +201,14 @@ Optional COMMIT-MSG can be provided, using
                           msg)))
     (mabo3n/backup-files--run-command command)))
 
-(spacemacs/declare-prefix "o b" "mabo3n/backup")
+;; ;; TODO Bind backup keys to something
+;; (spacemacs/declare-prefix "o b" "mabo3n/backup")
 
-(spacemacs/set-leader-keys
-  "o b f" #'mabo3n/backup-file
-  "o b o" #'mabo3n/backup-org-files
-  "o b d" #'mabo3n/backup-recent-dotfiles
-  "o b C-c" #'mabo3n/backup-dotspacemacs-files)
+;; (spacemacs/set-leader-keys
+;;   "o b f" #'mabo3n/backup-file
+;;   "o b o" #'mabo3n/backup-org-files
+;;   "o b d" #'mabo3n/backup-recent-dotfiles
+;;   "o b C-c" #'mabo3n/backup-pending-doom-config)
 
 (provide 'init-backup)
 ;;; init-backup.el ends here
