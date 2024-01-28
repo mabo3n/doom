@@ -83,6 +83,8 @@
 (load! "lisp/init-utils")
 (load! "lisp/init-backup")
 
+(map! :leader
+      "f : b" #'mabo3n/backup-file)
 
 ;; (doom/reset-font-size)
 ;; (doom/increase-font-size 2)
