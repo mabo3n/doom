@@ -81,6 +81,10 @@
   "Non nil if I'm in my work setup")
 
 (load! "lisp/init-utils")
+(load! "lisp/init-backup")
+
+(map! :leader
+      "f : b" #'mabo3n/backup-file)
 
 ;; (doom/reset-font-size)
 ;; (doom/increase-font-size 2)
@@ -185,6 +189,9 @@
 
 (after! dired
   (map! :leader "f j" #'dired-jump))
+
+(map! :leader
+      :desc "Switch to last buffer" "b `" #'evil-switch-to-windows-last-buffer)
 
 (map! :when (modulep! :ui workspaces)
       :leader
