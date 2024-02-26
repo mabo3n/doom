@@ -50,7 +50,56 @@
         ("o" "Centralized templates for projects")
         ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :clock-resume nil)
         ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :clock-resume t :kill-buffer t)
-        ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :clock-resume t)))
+        ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :clock-resume t)
+
+        ("w" "Jobs")
+
+        ("wc" "Company" entry
+         (file+headline "~/docs/jobs/companies.org" "Companies")
+         "* REVIEW %(mabo3n/org-capture-jobs-read-new-company
+                    )%^{Source}p%^{Source_link|-}p
+  :LOGBOOK:
+  - State \"REVIEW\"     from              %U
+  :END:"
+         :immediate-finish t)
+
+        ("wp" "Position" entry
+         (file+function "~/docs/jobs/companies.org"
+                        mabo3n/org-capture-jobs-position-find-headline-function)
+         "* %^{Title} (%^{Minimum yoe|-}+ yoe)
+  :PROPERTIES:
+  :Yoe: %\\2
+  :END:
+  [[%^{Link}][Link]]%?"
+         :jump-to-captured t)
+
+        ("wa" "Application" entry
+         (file+headline "~/docs/jobs/processes.org" "Processes")
+         "* %(mabo3n/org-capture-template-read-headline-link
+              \"~/docs/jobs/companies.org\"
+              '((\"LEVEL=2+company\"))) / %(read-string
+                                            \"Title: \")%^{Webpage}p%?"
+         :immediate-finish t :jump-to-captured t)
+
+        ("wi" "Interview" entry
+         (file+function "~/docs/jobs/processes.org"
+                        (lambda ()
+                          (mabo3n/org-capture-dive-to-headline
+                           '(("LEVEL=2+process" . "Application: ")))))
+         "* Interview (%^{Type|Phone screen|Technical screen|Other}) :interview:
+  %^T"
+         :immediate-finish t :jump-to-captured t)
+
+        ("ws" "Step" entry
+         (file+function "~/docs/jobs/processes.org"
+                        (lambda ()
+                          (mabo3n/org-capture-dive-to-headline
+                           '(("LEVEL=2+process" . "Application: ")))))
+         "* %^{Step}
+  DEADLINE: %^t"
+         :immediate-finish t :jump-to-captured t)
+
+      ))
 
 
 (defun mabo3n/org-capture-find-file-function (file)
