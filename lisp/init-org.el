@@ -105,7 +105,7 @@ With a \\[universal-argument], ALLOW-NEW is t."
          (org-map-entries (apply-partially 'org-entry-get nil "ITEM")
                           match))
         (prompt (or prompt "Headline: ")))
-    (helm-comp-read prompt headlines :must-match (not allow-new))))
+    (completing-read prompt headlines nil (not allow-new))))
 
 (defun mabo3n/org-capture-dive-to-headline (match-sequence &optional allow-new)
   "Read a headline according to MATCH-SEQUENCE in current buffer.
