@@ -76,7 +76,7 @@
          (file+headline "~/docs/jobs/processes.org" "Processes")
          "* %(mabo3n/org-capture-template-read-headline-link
               \"~/docs/jobs/companies.org\"
-              '((\"LEVEL=2+company\"))) / [[%^{Link to position}][%^{Title|Position}]]%?"
+              '((\"LEVEL=2+company\")) t) / [[%^{Link to position}][%^{Title|Position}]]%?"
          :immediate-finish t :jump-to-captured t)
 
         ("wi" "Interview" entry
@@ -194,15 +194,19 @@ With a \\[universal-argument], ALLOW-NEW is t."
          (when lastp (1+ (org-outline-level))))
         (org-narrow-to-subtree))))
 
-(defun mabo3n/org-capture-template-read-headline-link (file match-sequence)
+(defun mabo3n/org-capture-template-read-headline-link (file match-sequence &optional allow-new)
   "Return a link to a headline read through MATCH-SEQUENCE in FILE.
 
-This can be used in templates to expand to a link to a headline,
-which is chosen interactively by a sequential of [parent] headline prompts
-according to MATCH-SEQUENCE.
+This can be used in templates to expand to a link to a headline, which is chosen
+interactively by a sequential of [parent] headline prompts according to
+MATCH-SEQUENCE.
+
+If ALLOW-NEW is non-nil, entering a non-matching string in the
+last prompt creates a new headline.
+
 See function `mabo3n/org-capture-dive-to-headline' for more details."
   (with-current-buffer (org-capture-target-buffer file)
-     (mabo3n/org-capture-dive-to-headline match-sequence)
+     (mabo3n/org-capture-dive-to-headline match-sequence allow-new)
      ;; apparently this doesn't work non-interactively
      ;; https://narkive.com/RtJ6Kjrt.1
      (call-interactively 'org-store-link))
