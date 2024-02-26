@@ -58,27 +58,25 @@
          (file+headline "~/docs/jobs/companies.org" "Companies")
          "* REVIEW %(mabo3n/org-capture-jobs-read-new-company
                     )%^{Source}p%^{Source_link|-}p
-  :LOGBOOK:
-  - State \"REVIEW\"     from              %U
-  :END:"
+:LOGBOOK:
+- State \"REVIEW\"     from              %U
+:END:"
          :immediate-finish t)
 
         ("wp" "Position" entry
          (file+function "~/docs/jobs/companies.org"
                         mabo3n/org-capture-jobs-position-find-headline-function)
-         "* %^{Title} (%^{Minimum yoe|-}+ yoe)
-  :PROPERTIES:
-  :Yoe: %\\2
-  :END:
-  [[%^{Link}][Link]]%?"
+         "* [[%^{Link}][%^{Title|Link}]]%? (%^{Minimum yoe|0}+ yoe)
+:PROPERTIES:
+:Yoe: %\\3
+:END:"
          :jump-to-captured t)
 
         ("wa" "Application" entry
          (file+headline "~/docs/jobs/processes.org" "Processes")
          "* %(mabo3n/org-capture-template-read-headline-link
               \"~/docs/jobs/companies.org\"
-              '((\"LEVEL=2+company\"))) / %(read-string
-                                            \"Title: \")%^{Webpage}p%?"
+              '((\"LEVEL=2+company\"))) / [[%^{Link to position}][%^{Title|Position}]]%?"
          :immediate-finish t :jump-to-captured t)
 
         ("wi" "Interview" entry
@@ -87,7 +85,7 @@
                           (mabo3n/org-capture-dive-to-headline
                            '(("LEVEL=2+process" . "Application: ")))))
          "* Interview (%^{Type|Phone screen|Technical screen|Other}) :interview:
-  %^T"
+%^T"
          :immediate-finish t :jump-to-captured t)
 
         ("ws" "Step" entry
@@ -96,7 +94,7 @@
                           (mabo3n/org-capture-dive-to-headline
                            '(("LEVEL=2+process" . "Application: ")))))
          "* %^{Step}
-  DEADLINE: %^t"
+DEADLINE: %^t"
          :immediate-finish t :jump-to-captured t)
 
       ))
