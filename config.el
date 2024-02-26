@@ -183,7 +183,8 @@
       :desc "Switch workspace"     "TAB TAB" #'+workspace/switch-to
       :desc "Display tab bar"      "TAB ."   #'+workspace/display)
 
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type nil
+      avy-timeout-seconds 0.25)
 
 ;; C# stuff
 
