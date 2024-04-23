@@ -13,7 +13,7 @@
  org-id-link-to-org-use-id 'use-existing
  org-startup-folded 'show2levels
  ;; org-hide-block-startup t
- ;; org-hide-emphasis-markers t
+ org-hide-emphasis-markers t
  org-image-actual-width nil)
 
 (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
