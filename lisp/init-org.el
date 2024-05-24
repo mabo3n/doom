@@ -14,7 +14,9 @@
  org-startup-folded 'show2levels
  ;; org-hide-block-startup t
  org-hide-emphasis-markers t
- org-image-actual-width nil)
+ org-image-actual-width nil
+ org-pretty-entities t
+ )
 
 (setq org-default-notes-file (expand-file-name "notes.org" org-directory))
 
