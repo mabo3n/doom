@@ -186,6 +186,12 @@
 (setq display-line-numbers-type nil
       avy-timeout-seconds 0.25)
 
+;; Python stuff
+
+(after! python
+  (map! :map python-mode-map
+        :nvi "C-<return>" #'python-shell-send-statement))
+
 ;; C# stuff
 
 ;; Make eglot know that csharp-tree-sitter-mode is also csharp.
