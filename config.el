@@ -111,7 +111,8 @@
         "C-M-n"   #'vertico-next-group
         "C-M-p"   #'vertico-previous-group)
   (setq vertico-cycle nil
-        vertico-count 11))
+        vertico-count 11
+        vertico-sort-function #'vertico-sort-history-alpha))
 
 (after! consult
   ;; Overriding config to use C-j as preview key instead of C-SPC
