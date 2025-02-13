@@ -94,7 +94,8 @@
 
 (map! :leader "SPC" nil) ;; #'execute-extended-command)
 
-(setq show-trailing-whitespace t)
+(setq show-trailing-whitespace t
+      evil-want-fine-undo t)
 
 (after! vertico
   (map! :map vertico-map
