@@ -16,6 +16,7 @@
     ("^Downloads" . "down")
     ("^Pictures"  . "pics")
     ("^Desktop"   . "desk")
+    ("^/mnt/c/Users/marcel.bornancin/" . "win/")
     ("^\\."       . ,(concat (file-name-as-directory "dot") ".")))
   "File path transformations to be applied before backing up files.
 
@@ -33,8 +34,7 @@ prepended by `mabo3n/backup-files-remote-root'\".
 
 Note that no sanitization/validation against paths are performed."
   (let ((expanded-file (expand-file-name file)))
-    (when (string-prefix-p mabo3n/home-dir expanded-file)
-      (let* ((relative-file-path
+    (let* ((relative-file-path
               (string-trim-left expanded-file
                                 (concat "^" (file-name-as-directory
                                              mabo3n/home-dir))))
@@ -49,7 +49,7 @@ Note that no sanitization/validation against paths are performed."
                 ;; **/foo/file -> **/foo/
                 (file-name-directory transformed-path))))
         (concat mabo3n/backup-files-remote-root
-                transformed-path-last-directory)))))
+                transformed-path-last-directory))))
 
 (defun mabo3n/backup-files--build-backup-command (file &optional args)
   "Generate a shell command to backup FILE.
@@ -66,10 +66,6 @@ ARGS is a list of string arguments forwarded to rclone."
                      (throw 'continue nil)))
                   (destination-file
                    (cond
-                    ((not (string-prefix-p mabo3n/home-dir expanded-file))
-                     (message "Cannot backup file from outside user home directory \"%s\"."
-                              expanded-file)
-                     (throw 'continue nil))
                     ((string= mabo3n/home-dir expanded-file)
                      (message "Cannot backup the whole user home directory \"%s\"."
                               expanded-file)
