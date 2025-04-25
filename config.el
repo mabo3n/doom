@@ -107,6 +107,7 @@
         "C-l" (cmds! (eq 'file (vertico--metadata-get 'category)) #'vertico-directory-up)
         "C-j" (cmds! (eq 'file (vertico--metadata-get 'category)) #'+vertico/enter-or-preview
                      #'+vertico/embark-preview)
+        "DEL"     #'backward-delete-char
         ;; C-n and C-p are bound to next/prev by default but these are not
         "C-M-n"   #'vertico-next-group
         "C-M-p"   #'vertico-previous-group)
