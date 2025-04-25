@@ -133,7 +133,7 @@
    :preview-key (list "C-j" :debounce 0.5 'any)))
 
 (after! embark
-  (setq embark-help-key "C-SPC"
+  (setq embark-help-key "C-h"
         embark-quit-after-action nil))
 
 (after! company
