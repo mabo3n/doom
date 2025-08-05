@@ -130,7 +130,9 @@
    :preview-key "C-j")
   (consult-customize
    consult-theme
-   :preview-key (list "C-j" :debounce 0.5 'any)))
+   :preview-key (list "C-j" :debounce 0.5 'any))
+  ;; Use regular search, including hidden/ignored files.
+  (setq consult-find-args "find ."))
 
 (after! embark
   (setq embark-help-key "C-h"
