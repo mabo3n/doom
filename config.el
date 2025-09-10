@@ -154,6 +154,13 @@
   (setq git-commit-style-convention-checks (cl-remove 'overlong-summary-line
                                              git-commit-style-convention-checks)))
 
+(after! projectile
+  (let ((repos-path (concat mabo3n/home-dir "repos")))
+    (setq projectile-project-search-path `(,repos-path
+                                           (,repos-path . 1)
+                                           (,repos-path . 2)
+                                           (,repos-path . 3)))))
+
 (when mabo3n/workp
   (after! browse-at-remote
     ;; Teach browse-at-remote to handle custom ssh host
