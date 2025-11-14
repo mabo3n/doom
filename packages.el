@@ -48,8 +48,3 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
-
-;; Workaround to fix org-roam link issue
-;; https://github.com/org-roam/org-roam/issues/2361#issuecomment-1680562960
-
-(package! org :pin "ca873f7")
