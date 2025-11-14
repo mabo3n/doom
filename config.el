@@ -237,7 +237,7 @@
 
 ;; org-roam stuff
 
-(when (modulep! :lang org +roam2)
+(when (modulep! :lang org +roam)
   (map! :leader
         :desc "Find node"        "n r n" #'org-roam-node-find
         :desc "Capture to node"  "n r c" #'org-roam-capture
