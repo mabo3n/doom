@@ -213,6 +213,11 @@
       :desc "Switch workspace"     "TAB TAB" #'+workspace/switch-to
       :desc "Display tab bar"      "TAB ."   #'+workspace/display)
 
+(map!
+ (:map 'override
+   :v "v" #'er/expand-region
+   :v "V" #'er/contract-region))
+
 (setq display-line-numbers-type nil)
 
 ;; C# stuff
