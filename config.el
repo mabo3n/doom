@@ -86,8 +86,8 @@
 (map! :leader
       "f : b" #'mabo3n/backup-file)
 
-;; (doom/reset-font-size)
-;; (doom/increase-font-size 2)
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(doom-adjust-font-size 16.0 t)
 
 (use-package! which-key
   :init (setq which-key-idle-delay 0.4
