@@ -87,7 +87,7 @@
       "f : b" #'mabo3n/backup-file)
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
-(doom-adjust-font-size 16.0 t)
+(doom-adjust-font-size 20.0 t)
 
 (use-package! which-key
   :init (setq which-key-idle-delay 0.4
