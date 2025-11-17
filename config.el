@@ -90,8 +90,7 @@
 (doom-adjust-font-size 20.0 t)
 
 (use-package! which-key
-  :init (setq which-key-idle-delay 0.4
-              which-key-use-C-h-commands t))
+  :init (setq which-key-idle-delay 0.4))
 
 (map! :leader "SPC" nil) ;; #'execute-extended-command)
 
