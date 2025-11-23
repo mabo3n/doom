@@ -219,6 +219,30 @@
 
 (setq display-line-numbers-type nil)
 
+;; lisp stuff
+
+(after! paredit
+  (map! :nvi  ;; structural editing/movement
+        "M-h" #'paredit-backward
+        "M-l" #'paredit-forward
+        "M-k" #'paredit-backward-up
+        "M-j" #'paredit-forward-down
+
+        "M-s" #'paredit-forward-slurp-sexp ;; FIXME find another one
+        "M-S" #'paredit-backward-slurp-sexp
+        "M-b" #'paredit-forward-barf-sexp
+        "M-B" #'paredit-backward-barf-sexp
+
+        "M-x" #'paredit-splice-sexp ;; FIXME not working, find another one
+        "M-r" #'paredit-raise-sexp ;; FIXME not working
+        "M-K" #'paredit-kill
+
+        "M-w" #'paredit-wrap-round
+        "M-[" #'paredit-wrap-square
+        "M-{" #'paredit-wrap-curly
+        ))
+
+
 ;; C# stuff
 
 ;; Make eglot know that csharp-tree-sitter-mode is also csharp.
