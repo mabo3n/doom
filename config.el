@@ -86,9 +86,6 @@
 (map! :leader
       "f : b" #'mabo3n/backup-file)
 
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
-(doom-adjust-font-size 20.0 t)
-
 (use-package! which-key
   :init (setq which-key-idle-delay 0.4))
 
@@ -314,3 +311,8 @@
 (when (modulep! :tools biblio)
   (setq org-cite-global-bibliography '("~/docs/My Library.bib")
         citar-bibliography org-cite-global-bibliography))
+
+
+;; resize font & frame (might raise error on config hot-reload)
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(doom-adjust-font-size 20.0 t)
