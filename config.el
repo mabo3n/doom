@@ -221,6 +221,9 @@
 
 ;; lisp stuff
 
+;; required to navigate SEXPs properly in normal mode
+(setq evil-move-beyond-eol t)
+
 (after! paredit
   (map! :nvi  ;; structural editing/movement
         "M-h" #'paredit-backward
