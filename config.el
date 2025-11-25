@@ -36,7 +36,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type nil)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -214,21 +214,26 @@
    :v "v" #'er/expand-region
    :v "V" #'er/contract-region))
 
-(setq display-line-numbers-type nil)
-
-(defun mabo3n/toggle-abs-line-numbers-globally()
+(defun mabo3n/toggle-abs-line-numbers-globally ()
   "Toggle global absolute line numbers on/off.
-   Cycles between:
-   1. Global Absolute Line Numbers
-   2. No Line Numbers"
+   Properly handles Doom Emacs defaults by toggling the variable `display-line-numbers-type`."
   (interactive)
-  (if global-display-line-numbers-mode
+  (if (or (bound-and-true-p global-display-line-numbers-mode)
+          (eq display-line-numbers-type t))
       (progn
+        ;; 1. Set the variable to nil so new buffers don't auto-enable it
+        (setq display-line-numbers-type nil)
+        ;; 2. Disable the global mode
         (global-display-line-numbers-mode -1)
+        ;; 3. Force disable locally on the current buffer just in case
+        (display-line-numbers-mode -1)
         (message "Global line numbers disabled (Solo Mode)"))
-    (setq display-line-numbers-type t)
-    (global-display-line-numbers-mode 1)
-    (message "Global absolute line numbers enabled (Pairing Mode)")))
+    (progn
+      ;; 1. Set the variable to t (absolute)
+      (setq display-line-numbers-type t)
+      ;; 2. Enable the global mode
+      (global-display-line-numbers-mode 1)
+      (message "Global absolute line numbers enabled (Pairing Mode)"))))
 
 (map! :leader
       :desc "Line numbers globally" "t L" #'mabo3n/toggle-abs-line-numbers-globally)
