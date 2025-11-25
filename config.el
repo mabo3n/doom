@@ -216,13 +216,30 @@
 
 (setq display-line-numbers-type nil)
 
+(defun mabo3n/toggle-abs-line-numbers-globally()
+  "Toggle global absolute line numbers on/off.
+   Cycles between:
+   1. Global Absolute Line Numbers
+   2. No Line Numbers"
+  (interactive)
+  (if global-display-line-numbers-mode
+      (progn
+        (global-display-line-numbers-mode -1)
+        (message "Global line numbers disabled (Solo Mode)"))
+    (setq display-line-numbers-type t)
+    (global-display-line-numbers-mode 1)
+    (message "Global absolute line numbers enabled (Pairing Mode)")))
+
+(map! :leader
+      :desc "Line numbers globally" "t L" #'mabo3n/toggle-abs-line-numbers-globally)
+
 ;; lisp stuff
 
 ;; required to navigate SEXPs properly in normal mode
 (setq evil-move-beyond-eol t)
 
 (after! paredit
-  (map! :nvi  ;; structural editing/movement
+  (map! :nv  ;; structural editing/movement
         "M-h" #'paredit-backward
         "M-l" #'paredit-forward
         "M-k" #'paredit-backward-up
