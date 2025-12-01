@@ -334,6 +334,15 @@
   (setq org-cite-global-bibliography '("~/docs/My Library.bib")
         citar-bibliography org-cite-global-bibliography))
 
+(let ((custom-lookup-providers
+       '(("GitHub - nu repos" "https://github.com/search?q=org:nubank+%s&type=repositories"))))
+  (dolist (provider custom-lookup-providers)
+    (unless (assoc (car provider) +lookup-provider-url-alist)
+     (push provider +lookup-provider-url-alist))))
+
+;; To delete any misconfigured entry
+;; (setq +lookup-provider-url-alist
+;;       (assoc-delete-all "GitHub - nu repos" +lookup-provider-url-alist))
 
 ;; resize font & frame (might raise error on config hot-reload)
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
