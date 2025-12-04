@@ -260,8 +260,8 @@
         "M-K" #'paredit-kill
 
         "M-w" #'paredit-wrap-round
-        "M-[" #'paredit-wrap-square
-        "M-{" #'paredit-wrap-curly
+        "M-]" #'paredit-wrap-square
+        "M-}" #'paredit-wrap-curly
         ))
 
 
