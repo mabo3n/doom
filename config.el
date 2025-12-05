@@ -286,6 +286,14 @@
 (when (modulep! :lang org)
   (load! "lisp/init-org"))
 
+(after! org-agenda
+  (map! :map evil-org-agenda-mode-map :after evil-org-agenda
+        ;; Reverse RET and S-RET in org-agenda
+        :m "<return>"   #'org-agenda-goto
+        :m "S-<return>" #'org-agenda-switch-to)
+  ;; and narrow to heading after navigating
+  (add-hook 'org-agenda-after-show-hook #'org-narrow-to-subtree))
+
 ;; org-roam stuff
 
 (when (modulep! :lang org +roam)
