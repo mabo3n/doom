@@ -343,7 +343,8 @@
         citar-bibliography org-cite-global-bibliography))
 
 (let ((custom-lookup-providers
-       '(("GitHub - nu repos" "https://github.com/search?q=org:nubank+%s&type=repositories"))))
+       '(("GitHub - nu repos" "https://github.com/search?q=org:nubank+%s&type=repositories")
+         ("Nubank CodeSearch" "https://codesearch.nubank.com.br/search/linux?q=%s&fold_case=auto&regex=false&context=true"))))
   (dolist (provider custom-lookup-providers)
     (unless (assoc (car provider) +lookup-provider-url-alist)
      (push provider +lookup-provider-url-alist))))
