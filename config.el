@@ -264,6 +264,18 @@
         "M-}" #'paredit-wrap-curly
         ))
 
+(defun mabo3n/cider-eval-region-or-defun ()
+  "Evaluate region if active, otherwise evaluate top-level defun."
+  (interactive)
+  (if (use-region-p)
+      (cider-eval-region (region-beginning) (region-end))
+    (cider-eval-defun-at-point)))
+
+(after! clojure-mode
+  (map! :map clojure-mode-map
+        :nvi "C-<return>" #'mabo3n/cider-eval-region-or-defun))
+
+
 
 ;; C# stuff
 
