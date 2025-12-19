@@ -216,7 +216,8 @@
 
 (defun mabo3n/toggle-abs-line-numbers-globally ()
   "Toggle global absolute line numbers on/off.
-   Properly handles Doom Emacs defaults by toggling the variable `display-line-numbers-type`."
+   Properly handles Doom Emacs defaults by toggling the variable
+   `display-line-numbers-type`."
   (interactive)
   (if (or (bound-and-true-p global-display-line-numbers-mode)
           (eq display-line-numbers-type t))
