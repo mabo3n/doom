@@ -154,6 +154,9 @@
         "C-h" #'company-show-location
         "C-j" #'company-show-doc-buffer))
 
+(after! treemacs
+  (treemacs-follow-mode 1))
+
 ;; Restore `s' to yank surround instead of evil snipe
 (when (modulep! :editor evil +everywhere)
   (remove-hook 'doom-first-input-hook #'evil-snipe-mode)
