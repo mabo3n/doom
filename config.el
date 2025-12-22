@@ -89,6 +89,17 @@
 (map! :leader
       "f : b" #'mabo3n/backup-file)
 
+(map! :leader
+      "w -" #'evil-window-decrease-height
+
+      ;; swap = and + for height resizing
+      "w =" #'evil-window-increase-height
+      "w +" #'balance-windows
+
+      ;; use [ ] instead of < > for width resizing
+      "w [" #'evil-window-decrease-width
+      "w ]" #'evil-window-increase-width)
+
 (use-package! which-key
   :init (setq which-key-idle-delay 0.4))
 
