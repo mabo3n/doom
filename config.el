@@ -38,10 +38,6 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type nil)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;
@@ -74,11 +70,18 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(defconst mabo3n/workp t
+  "Non nil if I'm in my work setup")
+
 (defconst mabo3n/home-dir (expand-file-name "~/")
   "User home directory (default ~/).")
 
-(defconst mabo3n/workp t
-  "Non nil if I'm in my work setup")
+(defconst mabo3n/zone-dir (expand-file-name "zones/nu/" mabo3n/home-dir)
+  "Current zone directory.")
+
+;; If you use `org' and don't want your org files in
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory (expand-file-name "org/" mabo3n/zone-dir))
 
 (load! "lisp/init-utils")
 (load! "lisp/init-backup")
@@ -319,7 +322,7 @@
         :desc "Remove tag"       "n r T" #'org-roam-tag-remove
         :desc "Open random node" "n r #" #'org-roam-node-random)
 
-  (setq org-roam-directory (expand-file-name "~/org/roam/")
+  (setq org-roam-directory (expand-file-name "roam/" org-directory)
         ;; override default template to add created/modified/filetags props
         org-roam-capture-templates
         `(("d" "default" plain "\n* TODO roam entry: ${title}%?"
@@ -352,7 +355,7 @@
 ;; biblio stuff
 
 (when (modulep! :tools biblio)
-  (setq org-cite-global-bibliography '("~/docs/My Library.bib")
+  (setq org-cite-global-bibliography '((expand-file-name "My Library.bib" mabo3n/zone-dir))
         citar-bibliography org-cite-global-bibliography))
 
 (let ((custom-lookup-providers
