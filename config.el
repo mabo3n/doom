@@ -289,7 +289,11 @@
 (after! clojure-mode
   (map! :map clojure-mode-map
         :nvi "C-<return>" #'mabo3n/cider-eval-region-or-defun
-        :nvi "M-<return>" #'cider-eval-buffer))
+        :nvi "M-<return>" #'cider-eval-buffer)
+
+  ;; No needed as we're configuring with `define-clojure-indent'.
+  ;; It is acually messing up the config after loading the REPL.
+  (setq cider-dynamic-indentation nil))
 
 ;; C# stuff
 
