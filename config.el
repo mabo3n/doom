@@ -288,7 +288,8 @@
 
 (after! clojure-mode
   (map! :map clojure-mode-map
-        :nvi "C-<return>" #'mabo3n/cider-eval-region-or-defun))
+        :nvi "C-<return>" #'mabo3n/cider-eval-region-or-defun
+        :nvi "M-<return>" #'cider-eval-buffer))
 
 ;; C# stuff
 
