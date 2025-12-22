@@ -279,6 +279,19 @@
         "M-}" #'paredit-wrap-curly
         ))
 
+;; Remove closing bracket along with the opening one
+;; BUT don't annoy me when typing `"' on non-coding buffers
+;; TODO: try out strict mode instead? probably OK for insert state
+(after! (:and smartparens emacs)
+  (map! :map emacs-lisp-mode-map
+        :i   "<backspace>"   #'sp-backward-delete-char
+        :nvi "M-<backspace>" #'sp-backward-delete-sexp))
+
+(after! (:and smartparens clojure-mode)
+  (map! :map clojure-mode-map
+        :i   "<backspace>"   #'sp-backward-delete-char
+        :nvi "M-<backspace>" #'sp-backward-delete-sexp))
+
 (defun mabo3n/cider-eval-region-or-defun ()
   "Evaluate region if active, otherwise evaluate top-level defun."
   (interactive)
