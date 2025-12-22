@@ -279,8 +279,6 @@
   (map! :map clojure-mode-map
         :nvi "C-<return>" #'mabo3n/cider-eval-region-or-defun))
 
-
-
 ;; C# stuff
 
 ;; Make eglot know that csharp-tree-sitter-mode is also csharp.
@@ -318,6 +316,15 @@
 ;; To delete any misconfigured entry
 ;; (setq +lookup-provider-url-alist
 ;;       (assoc-delete-all "GitHub - nu repos" +lookup-provider-url-alist))
+
+;; Nu stuff
+
+(when mabo3n/workp
+  (let ((nudev-emacs-path "~/dev/nu/nudev/ides/emacs/"))
+    (when (file-directory-p nudev-emacs-path)
+      (add-to-list 'load-path nudev-emacs-path)
+      (require 'nu nil t)
+      (require 'nu-datomic-query nil t))))
 
 ;; resize font & frame (might raise error on config hot-reload)
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
