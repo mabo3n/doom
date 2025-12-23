@@ -317,16 +317,23 @@
     (when (and (bound-and-true-p cider-mode)
                (cider-connected-p))
       (cider-repl-emit-stdout (cider-current-repl)
-                              (format "\n; Evaluating buffer: %s" (buffer-name)))
+                              (format "; Evaluating buffer: %s\n" (buffer-name)))
       (cider-eval-buffer)))
 
   (map! :map clojure-mode-map
         :nvi "C-<return>" #'mabo3n/cider-eval-region-or-defun
         :nvi "M-<return>" #'mabo3n/cider-eval-buffer)
 
-  (add-hook! 'clojure-mode-hook
-    (defun mabo3n/setup-cider-eval-on-save ()
-      (add-hook 'after-save-hook #'mabo3n/cider-eval-buffer nil 'local)))
+  (define-minor-mode mabo3n-auto-eval-mode
+    "Toggle automatic CIDER evaluation of the buffer on save."
+    :lighter " Auto-Eval" ; Text that appears in your modeline
+    (if mabo3n-auto-eval-mode
+        (add-hook 'after-save-hook #'mabo3n/cider-eval-buffer nil 'local)
+      (remove-hook 'after-save-hook #'mabo3n/cider-eval-buffer 'local)))
+
+  (map! :map clojure-mode-map
+        :localleader
+        :desc "Toggle auto-eval on save" "e <return>" #'mabo3n-auto-eval-mode)
 
   ;; No needed as we're configuring with `define-clojure-indent'.
   ;; It is acually messing up the config after loading the REPL.
