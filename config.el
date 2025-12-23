@@ -302,17 +302,31 @@
         :i   "<backspace>"   #'sp-backward-delete-char
         :nvi "M-<backspace>" #'sp-backward-delete-sexp))
 
-(defun mabo3n/cider-eval-region-or-defun ()
-  "Evaluate region if active, otherwise evaluate top-level defun."
-  (interactive)
-  (if (use-region-p)
-      (cider-eval-region (region-beginning) (region-end))
-    (cider-eval-defun-at-point)))
-
 (after! clojure-mode
+
+  (defun mabo3n/cider-eval-region-or-defun ()
+    "Evaluate region if active, otherwise evaluate top-level defun."
+    (interactive)
+    (if (use-region-p)
+        (cider-eval-region (region-beginning) (region-end))
+      (cider-eval-defun-at-point)))
+
+  (defun mabo3n/cider-eval-buffer ()
+    "Evaluate (and print) the current buffer if CIDER REPL is connected."
+    (interactive)
+    (when (and (bound-and-true-p cider-mode)
+               (cider-connected-p))
+      (cider-repl-emit-stdout (cider-current-repl)
+                              (format "\n; Evaluating buffer: %s" (buffer-name)))
+      (cider-eval-buffer)))
+
   (map! :map clojure-mode-map
         :nvi "C-<return>" #'mabo3n/cider-eval-region-or-defun
-        :nvi "M-<return>" #'cider-eval-buffer)
+        :nvi "M-<return>" #'mabo3n/cider-eval-buffer)
+
+  (add-hook! 'clojure-mode-hook
+    (defun mabo3n/setup-cider-eval-on-save ()
+      (add-hook 'after-save-hook #'mabo3n/cider-eval-buffer nil 'local)))
 
   ;; No needed as we're configuring with `define-clojure-indent'.
   ;; It is acually messing up the config after loading the REPL.
