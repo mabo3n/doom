@@ -219,6 +219,13 @@
 (map! :leader
       :desc "Switch to last buffer" "b `" #'evil-switch-to-windows-last-buffer)
 
+(map! :leader "s u" nil)
+(map! :when (modulep! :emacs undo +tree)
+      :leader :desc "Undo history" "b u" #'undo-tree-visualize
+
+      :when (modulep! :emacs undo)
+      :leader :desc "Undo history" "b u" #'vundo)
+
 (map! :when (modulep! :ui workspaces)
       :leader
       :desc "Restore last session" "TAB r"   #'+workspace/restore-last-session
