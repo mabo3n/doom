@@ -154,6 +154,11 @@
         "C-h" #'company-show-location
         "C-j" #'company-show-doc-buffer))
 
+(after! undo-fu
+  (setq undo-limit        (* 80 1024 1024)      ;; 80MB (soft limit)
+        undo-strong-limit (* 100 1024 1024)     ;; 100MB (hard limit)
+        undo-outer-limit  (* 1000 1024 1024)))  ;; 1GB (warning limit)
+
 (map! :leader "s u" nil)
 
 (map! :when (modulep! :emacs undo)
