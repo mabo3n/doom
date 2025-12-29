@@ -154,6 +154,14 @@
         "C-h" #'company-show-location
         "C-j" #'company-show-doc-buffer))
 
+(map! :leader "s u" nil)
+
+(map! :when (modulep! :emacs undo)
+      :leader :desc "Undo history" "b u" #'vundo)
+
+(map! :when (modulep! :emacs undo +tree) ; overwrite if enabled
+      :leader :desc "Undo history" "b u" #'undo-tree-visualize)
+
 (after! treemacs
   (treemacs-follow-mode 1))
 
@@ -218,13 +226,6 @@
 
 (map! :leader
       :desc "Switch to last buffer" "b `" #'evil-switch-to-windows-last-buffer)
-
-(map! :leader "s u" nil)
-(map! :when (modulep! :emacs undo +tree)
-      :leader :desc "Undo history" "b u" #'undo-tree-visualize
-
-      :when (modulep! :emacs undo)
-      :leader :desc "Undo history" "b u" #'vundo)
 
 (map! :when (modulep! :ui workspaces)
       :leader
