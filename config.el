@@ -269,6 +269,8 @@
 (map! :leader
       :desc "Line numbers globally" "t L" #'mabo3n/toggle-abs-line-numbers-globally)
 
+(setq +evil-want-o/O-to-continue-comments nil)
+
 ;; lisp stuff
 
 ;; required to navigate SEXPs properly in normal mode
