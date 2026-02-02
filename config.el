@@ -105,6 +105,8 @@
 
 (map! :leader "SPC" nil) ;; #'execute-extended-command)
 
+(map! :i "C-u" #'universal-argument)
+
 (setq show-trailing-whitespace t
       evil-want-fine-undo t)
 
