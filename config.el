@@ -147,7 +147,11 @@
 
 (after! embark
   (setq embark-help-key "C-h"
-        embark-quit-after-action nil))
+        embark-quit-after-action nil)
+  ;; C-SPC to select candidate so I don't need release Ctrl
+  (map! :map embark-general-map
+        "C-SPC" #'embark-select
+        "SPC" #'mark))
 
 (after! company
   (map! :map company-active-map
