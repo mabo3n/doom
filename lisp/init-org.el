@@ -36,7 +36,7 @@
 ;;; org-capture
 
 (defvar mabo3n/org-capture-work-item-label "Work item"
-  "Work items label for capturing AND hook setup.")
+  "Work items label for capturing.")
 (defvar mabo3n/org-capture-work-items-dir-path
   (expand-file-name "work-items/" mabo3n/zone-dir)
   "Base path for work items' directories.")
@@ -46,53 +46,26 @@
 (defun mabo3n/org-capture-work-item-get-create-path ()
   "Read work item ID and return proper file path.
 
-If work item was already captured, open its main file instead."
-  (let* ((id (read-string (concat mabo3n/org-capture-work-item-label ": ")
-                          "LPIP-"))
-         (dir-path (expand-file-name (concat id "/")
-                                     mabo3n/org-capture-work-items-dir-path))
-         (file-path (concat dir-path id ".org")))
+If work item was already captured, open its main file instead.
+If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
+  (if current-prefix-arg
+      (and (dired mabo3n/org-capture-work-items-dir-path)
+           nil)
+    (let* ((id (read-string (concat mabo3n/org-capture-work-item-label ": ")
+                            "LPIP-"))
+           (dir-path (expand-file-name (concat id "/")
+                                       mabo3n/org-capture-work-items-dir-path))
+           (file-path (concat dir-path id ".org")))
 
-    (setq mabo3n/org-capture-work-item-last-id id)
+      (setq mabo3n/org-capture-work-item-last-id id)
 
-    ;; Just open the file if it's already there
-    (if (file-exists-p file-path)
-        (progn
-          (find-file file-path)
-          ;; Return nil to tell org-capture to stop
-          (error "%s already exists! There you have it" id))
-      file-path)))
-
-(defun mabo3n/org-capture-work-item-finalize-setup ()
-  "Ensure directories exist before Org-capture saves the file.
-Uses buffer-file-name to ensure it works with dynamic paths."
-  (when (and mabo3n/org-capture-work-item-last-id
-             (derived-mode-p 'org-mode))
-    (let ((file (buffer-file-name (buffer-base-buffer))))
-      (when (and file (string-match-p (regexp-quote mabo3n/org-capture-work-item-last-id) file))
-        (let ((dir (file-name-directory file)))
-          (unless (file-directory-p dir)
-            (make-directory dir t))
-          ;; Pre-create the data folder for org-attach
-          (unless (file-directory-p (concat dir "data/"))
-            (make-directory (concat dir "data/") t)))))))
-
-(defun mabo3n/org-capture-work-item-setup-dir ()
-  "Ensure work item directory exists before capturing."
-  (when (and mabo3n/org-capture-work-item-last-id
-             (derived-mode-p 'org-mode))
-    (let ((file (buffer-file-name (buffer-base-buffer))))
-      (when (and file
-                 (string-match-p (regexp-quote mabo3n/org-capture-work-item-last-id) file))
-        (let ((dir (file-name-directory file)))
-          (unless (file-directory-p dir)
-            (make-directory dir t))
-          ;; ;; Use to create extra dirs as needed:
-          ;; (unless (file-directory-p (concat dir "data/"))
-          ;;   (make-directory (concat dir "data/") t))
-          )))))
-
-(add-hook 'org-capture-before-finalize-hook #'mabo3n/org-capture-work-item-setup-dir)
+      ;; Just open the file if it's already there
+      (if (file-exists-p file-path)
+          (progn
+            (find-file file-path)
+            ;; Return nil to tell org-capture to stop
+            (error "%s already exists! There you have it" id))
+        file-path))))
 
 (setq org-capture-templates
       `(("t" "Personal todo" entry
