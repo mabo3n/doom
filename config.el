@@ -280,7 +280,8 @@
 ;; lisp stuff
 
 ;; required to navigate SEXPs properly in normal mode
-(setq evil-move-beyond-eol t)
+(after! evil
+  (setq evil-move-beyond-eol t))
 
 (after! paredit
   (map! :nv  ;; structural editing/movement
