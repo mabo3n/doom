@@ -33,11 +33,36 @@
   ;; and narrow to heading after navigating
   (add-hook 'org-agenda-after-show-hook #'org-narrow-to-subtree))
 
-
 ;;; org-capture
 
+(defvar mabo3n/org-capture-work-item-last-id nil
+  "Last prompted work item ID.")
+
+(defun mabo3n/org-capture-work-item-get-create-path ()
+  "Prompt for work item ID and return proper file path.
+
+Creates work item folder structure if not found."
+  (let* ((id (read-string "Work item: " "LPIP-"))
+         (dir-path (expand-file-name (concat "work-items/" id "/") mabo3n/zone-dir))
+         (file-path (concat dir-path id ".org")))
+
+    ;; FIXME: move to org capture finalize hook
+    ;; Create work item dir if doesn't exist already
+    (unless (file-directory-p dir-path)
+      (make-directory dir-path t))
+
+    (setq mabo3n/org-capture-work-item-last-id id)
+
+    ;; Just open the file if it's already there
+    (if (file-exists-p file-path)
+        (progn
+          (find-file file-path)
+          ;; Return nil to tell org-capture to stop
+          (error "%s already exists! There you have it" id))
+      file-path)))
+
 (setq org-capture-templates
-      '(("t" "Personal todo" entry
+      `(("t" "Personal todo" entry
          (file+headline +org-capture-todo-file "Inbox")
          "* [ ] %?\n%i\n%a" :clock-resume t :kill-buffer t)
         ("n" "Personal notes" entry
@@ -46,6 +71,16 @@
         ("j" "Journal" entry
          (file+olp+datetree +org-capture-journal-file)
          "* %U %?\n%i\n%a" :clock-resume t :kill-buffer t)
+
+        ("i" "Work item" plain
+         (file mabo3n/org-capture-work-item-get-create-path)
+         ,(concat ":PROPERTIES:\n"
+                  ":DIR: ./\n"
+                  ":END:\n\n"
+                  "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)%?\n"
+                  "#+ROAM_REFS: https://nubank.atlassian.net/browse/%(append mabo3n/org-capture-work-item-last-id)\n\n")
+         :immediate-finish nil :jump-to-captured t)
+
         ("p" "Templates for projects")
         ("pt" "Project-local todo" entry
          (file+headline +org-capture-project-todo-file "Inbox")
