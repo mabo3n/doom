@@ -51,8 +51,12 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
   (if current-prefix-arg
       (and (dired mabo3n/org-capture-work-items-dir-path)
            nil)
-    (let* ((id (read-string (concat mabo3n/org-capture-work-item-label ": ")
-                            "LPIP-"))
+    (let* ((base-dir-path mabo3n/org-capture-work-items-dir-path)
+           (existing-work-items (when (file-directory-p base-dir-path)
+                                  (directory-files base-dir-path nil)))
+           (id (completing-read (concat mabo3n/org-capture-work-item-label ": ")
+                                existing-work-items nil nil
+                                "LPIP-"))
            (dir-path (expand-file-name (concat id "/")
                                        mabo3n/org-capture-work-items-dir-path))
            (file-path (concat dir-path id ".org")))
