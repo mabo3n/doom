@@ -68,5 +68,21 @@ ALLOWED-CHARS is passed along to `url-hexify-string'."
       (delete-region beg end)
       (insert encoded-url))))
 
+(defun mabo3n/flush-empty-lines (start end)
+  "`flush-lines' from START to END with a empty line pattern."
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point) (point-max))))
+  (flush-lines "^$" start end))
+
+(defun mabo3n/flush-blank-lines (start end)
+  "`flush-lines' from START to END with an empty-or-whitespace pattern."
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point) (point-max))))
+  (flush-lines "^[[:space:]]*$" start end))
+
 (provide 'init-utils)
 ;;; init-utils.el ends here
