@@ -117,6 +117,16 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
         ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :clock-resume t :kill-buffer t)
         ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :clock-resume t)))
 
+;; Resetting `[ ]' keybindings to match the char inside the brackets
+(after! org
+  (setq org-todo-keywords
+        '((sequence
+           "TODO(t)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
+          (sequence
+           "[ ](T)" "[-](-)" "[?](?)" "|" "[X](x)")
+          (sequence
+           "|" "OKAY(o)" "YES(y)" "NO(n)"))))
+
 ;; org-roam stuff
 
 (when (modulep! :lang org +roam)
