@@ -95,7 +95,8 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
                   ":DIR: ./\n"
                   ":END:\n\n"
                   "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)%?\n"
-                  "#+ROAM_REFS: https://nubank.atlassian.net/browse/%(append mabo3n/org-capture-work-item-last-id)\n\n")
+                  "#+ROAM_REFS: https://nubank.atlassian.net/browse/%(append mabo3n/org-capture-work-item-last-id)\n"
+                  "#+OPTIONS: toc:nil num:nil author:nil\n\n")
          :immediate-finish nil :jump-to-captured t)
 
         ("p" "Templates for projects")
