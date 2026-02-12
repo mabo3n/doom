@@ -33,6 +33,9 @@
   ;; and narrow to heading after navigating
   (add-hook 'org-agenda-after-show-hook #'org-narrow-to-subtree))
 
+(use-package! ox-gfm
+  :after org)
+
 ;;; org-capture
 
 (defvar mabo3n/org-capture-work-item-label "Work item"
