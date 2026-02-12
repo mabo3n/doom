@@ -194,6 +194,42 @@
                                            (,repos-path . 2)
                                            (,repos-path . 3)))))
 
+(defun mabo3n/zone-sync (&optional arg)
+  "Sync `mabo3n/zone-dir', or prompt for zone if ARG is non-nil."
+  (interactive "P")
+  (let* ((zone-dir
+          (if (not arg)
+              mabo3n/zone-dir
+            (let ((zones-dir (file-name-directory (directory-file-name mabo3n/zone-dir))))
+              (completing-read "Select zone to sync: "
+                               (thread-last (directory-files zones-dir t "^[^.]")
+                                            (seq-filter (lambda (f) (file-directory-p (concat f "/.git")))))))))
+         (default-directory (file-name-as-directory zone-dir))
+         (msg (format-time-string "<%Y-%m-%d %a %H:%M> Checkpoint")))
+
+    (unless (file-exists-p (concat default-directory ".git"))
+      (user-error "Directory %s is not a git repository" default-directory))
+
+    ;; (message "Syncing zone: %s..." (file-name-nondirectory (directory-file-name zone-dir)))
+
+    ;; Stage everything
+    (magit-call-git "add" "-A")
+
+    ;; Commit and push
+    (if (magit-anything-staged-p)
+        (progn
+          (magit-call-git "commit" "-m" msg)
+          (message "✓ Zone changes committed")
+          ;; Push
+          (message "Pushing to origin...")
+          (condition-case err
+              (progn
+                (magit-call-git "push" "origin" (magit-get-current-branch))
+                (message "🚀 Zone '%s' fully synced and pushed!"
+                         (file-name-nondirectory (directory-file-name zone-dir))))
+            (error (message "Push failed: %s" (error-message-string err)))))
+      (message "No Zone changes to commit."))))
+
 (when mabo3n/workp
   (after! browse-at-remote
     ;; Teach browse-at-remote to handle custom ssh host
