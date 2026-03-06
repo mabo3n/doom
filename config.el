@@ -218,16 +218,20 @@
     ;; Commit and push
     (if (magit-anything-staged-p)
         (progn
-          (magit-call-git "commit" "-m" msg)
-          (message "✓ Zone changes committed")
+          ;; Commit
+
+          (magit-with-editor
+            (unless (zerop (magit-call-git "commit" "-m" msg "--no-gpg-sign"))
+             (user-error "🚫 Commit failed")))
+
           ;; Push
           (message "Pushing to origin...")
-          (condition-case err
-              (progn
-                (magit-call-git "push" "origin" (magit-get-current-branch))
-                (message "🚀 Zone '%s' fully synced and pushed!"
-                         (file-name-nondirectory (directory-file-name zone-dir))))
-            (error (message "Push failed: %s" (error-message-string err)))))
+          (unless (zerop (magit-call-git "push" "origin" (magit-get-current-branch)))
+            (user-error "🚫 Push failed"))
+
+          ;; Print
+          (message "🚀 Zone '%s' fully synced and pushed!"
+                   (file-name-nondirectory (directory-file-name zone-dir))))
       (message "No Zone changes to commit."))))
 
 (when mabo3n/workp
