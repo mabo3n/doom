@@ -443,3 +443,9 @@
 ;; resize font & frame (might raise error on config hot-reload)
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (doom-adjust-font-size 20.0 t)
+
+(after! eca
+  (setq eca-chat-use-side-window nil)
+  (map! :map eca-chat-mode-map
+        :g "C-c C-q" #'eca-chat-reset
+        :g "C-c C-k" #'eca-chat-stop-prompt))
