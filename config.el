@@ -285,6 +285,9 @@
       :desc "Switch workspace"     "TAB TAB" #'+workspace/switch-to
       :desc "Display tab bar"      "TAB ."   #'+workspace/display)
 
+;; Prevent cmd+t from opening a new workspace/perspective
+(map! "s-t" nil)
+
 (map!
  (:map 'override
    :v "v" #'er/expand-region
