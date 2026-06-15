@@ -354,9 +354,13 @@
         :i   "<backspace>"   #'sp-backward-delete-char
         :nvi "M-<backspace>" #'sp-backward-delete-sexp))
 
+;; Completely prevent smartparens-strict-mode from ever activating.
 ;; Often doesn't work as intended, better to live without it
 (after! smartparens
-  (smartparens-global-strict-mode nil))
+  (smartparens-global-strict-mode -1)
+  (defadvice! +disable-smartparens-strict-mode-a (&rest _)
+    :override #'smartparens-strict-mode
+    (smartparens-strict-mode -1)))
 
 
 (after! clojure-mode
