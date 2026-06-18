@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: org-babel-var
+# name: babel-var
 # key: var
 # --
 #+PROPERTY: header-args+ :var ${1:name}="${2:value}"
