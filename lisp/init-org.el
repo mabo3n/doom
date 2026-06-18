@@ -51,6 +51,8 @@
   "Base path for work items' directories.")
 (defvar mabo3n/org-capture-work-item-last-id nil
   "Last prompted work item ID.")
+(defvar mabo3n/org-capture-work-item-default-id-prefix "LPIP-"
+  "Default ID prefix prompted when capturing a work item.")
 
 (defun mabo3n/org-capture-work-item-get-create-path ()
   "Read work item ID and return proper file path.
@@ -69,7 +71,7 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
                              (if (eq action 'metadata)
                                  '(metadata (category . file))
                                (complete-with-action action existing-work-items string pred)))
-                           nil nil "LPIP-"))
+                           nil nil mabo3n/org-capture-work-item-default-id-prefix))
            (id (if (file-name-absolute-p selected-path)
                    (file-name-nondirectory (directory-file-name selected-path))
                  selected-path))
@@ -87,6 +89,11 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
             (error "%s already exists! There you have it" id))
         file-path))))
 
+(defun mabo3n/org-capture-ops-ticket-get-create-path ()
+  "Like `mabo3n/org-capture-work-item-get-create-path' but default to LEO- prefix."
+  (let ((mabo3n/org-capture-work-item-default-id-prefix "LEO-"))
+    (mabo3n/org-capture-work-item-get-create-path)))
+
 (setq org-capture-templates
       `(("t" "Personal todo" entry
          (file+headline +org-capture-todo-file "Inbox")
@@ -102,6 +109,19 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
          (file mabo3n/org-capture-work-item-get-create-path)
          ,(concat ":PROPERTIES:\n"
                   ":DIR: ./\n"
+                  ":END:\n\n"
+                  "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)%?\n"
+                  "#+ROAM_REFS: https://nubank.atlassian.net/browse/%(append mabo3n/org-capture-work-item-last-id)\n"
+                  "#+OPTIONS: toc:nil num:nil author:nil\n\n")
+         :immediate-finish nil :jump-to-captured t)
+
+        ("#" "Ops tickets")
+        ("#t" "ops Ticket" plain
+         (file mabo3n/org-capture-ops-ticket-get-create-path)
+         ,(concat ":PROPERTIES:\n"
+                  ":DIR: ./\n"
+                  ":customer_id: %^{customer_id}\n"
+                  ":shard: %^{shard}\n"
                   ":END:\n\n"
                   "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)%?\n"
                   "#+ROAM_REFS: https://nubank.atlassian.net/browse/%(append mabo3n/org-capture-work-item-last-id)\n"
