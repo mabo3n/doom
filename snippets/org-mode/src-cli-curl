@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: src cli curl
+# key: srclic
+# --
+#+begin_src sh :results output :wrap src json
+nu-br-${1:prod} ser curl ${2:get} ${3:\$shard} ${4:service} $0 | jq
+#+end_src
