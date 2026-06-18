@@ -33,6 +33,12 @@
   ;; and narrow to heading after navigating
   (add-hook 'org-agenda-after-show-hook #'org-narrow-to-subtree))
 
+;; Default babel results to stdout + verbatim (terminal-like behavior).
+;; No more automatic table coercion — output is inserted as-is.
+(setq org-babel-default-header-args
+      (assq-delete-all :results org-babel-default-header-args))
+(add-to-list 'org-babel-default-header-args '(:results . "output verbatim replace"))
+
 (use-package! ox-gfm
   :after org)
 
