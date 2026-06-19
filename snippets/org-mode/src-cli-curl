@@ -3,5 +3,5 @@
 # key: srclic
 # --
 #+begin_src sh :results output :wrap src js
-nu-br-${1:prod} ser curl ${2:get} ${3:\$shard} `(mabo3n/yas-skip-on-preview (completing-read "service: " (directory-files (getenv "NU_HOME") nil "^[^.]")) "service!")` ${4:/api/${5:customers/${6:\$customer_id}}}$0 | jq
+nu${1} ser curl ${2:get} ${3:\$shard} `(mabo3n/yas-skip-on-preview (completing-read "service: " (directory-files (getenv "NU_HOME") nil "^[^.]")) "service!")` ${4:/api/${5:customers/${6:\$customer_id}}}$0 | jq
 #+end_src
