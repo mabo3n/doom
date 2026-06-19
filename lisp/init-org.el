@@ -132,7 +132,8 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
                   "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)\n"
                   "#+ROAM_REFS: https://nubank.atlassian.net/browse/%(append mabo3n/org-capture-work-item-last-id)\n"
                   "#+OPTIONS: toc:nil num:nil author:nil\n"
-                  "#+PROPERTY: header-args+ :var customer_id=\"%\\1\" :var cusid=\"%\\1\"\n\n"
+                  "#+PROPERTY: header-args:sh :prologue \"export NU_COUNTRY=br\"\n"
+                  "#+PROPERTY: header-args+ :var customer_id=\"%\\1\" :var shard=\"%^{shard}\"\n\n"
                   "🔗 [[coppola:%\\1][Coppola]] / [[shuffle:%\\1][Shuffle]] / [[tristram:%\\1][Tristram]] / [[cia:%\\1][CIA]]\n\n%?")
          :immediate-finish nil :jump-to-captured t)
 
