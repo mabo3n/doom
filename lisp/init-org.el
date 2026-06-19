@@ -42,6 +42,14 @@
 (use-package! ox-gfm
   :after org)
 
+;;; org-link abbreviations
+
+(dolist (abbr '(("coppola"  . "https://backoffice.nubank.com.br/coppola/#/customers/%s")
+                ("shuffle"  . "https://backoffice.nubank.com.br/shuffle/#/person/%s")
+                ("tristram" . "https://backoffice.nubank.com.br/tristram/#/customer/%s")
+                ("cia"      . "https://backoffice.nubank.com.br/cia/user-lookup/?idType=customer_id&idValue=%s")))
+  (add-to-list 'org-link-abbrev-alist abbr))
+
 ;;; org-capture
 
 (defvar mabo3n/org-capture-work-item-label "Work item"
@@ -105,27 +113,27 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
          (file+olp+datetree +org-capture-journal-file)
          "* %U %?\n%i\n%a" :clock-resume t :kill-buffer t)
 
-        ("i" ,mabo3n/org-capture-work-item-label plain
+        ("#" "Work items")
+        ("#i" ,mabo3n/org-capture-work-item-label plain
          (file mabo3n/org-capture-work-item-get-create-path)
          ,(concat ":PROPERTIES:\n"
                   ":DIR: ./\n"
                   ":END:\n\n"
-                  "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)%?\n"
+                  "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)\n"
                   "#+ROAM_REFS: https://nubank.atlassian.net/browse/%(append mabo3n/org-capture-work-item-last-id)\n"
-                  "#+OPTIONS: toc:nil num:nil author:nil\n\n")
+                  "#+OPTIONS: toc:nil num:nil author:nil\n\n%?")
          :immediate-finish nil :jump-to-captured t)
-
-        ("#" "Ops tickets")
         ("#t" "ops Ticket" plain
          (file mabo3n/org-capture-ops-ticket-get-create-path)
          ,(concat ":PROPERTIES:\n"
                   ":DIR: ./\n"
                   ":customer_id: %^{customer_id}\n"
-                  ":shard: %^{shard}\n"
                   ":END:\n\n"
-                  "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)%?\n"
+                  "#+TITLE: %(append mabo3n/org-capture-work-item-last-id)\n"
                   "#+ROAM_REFS: https://nubank.atlassian.net/browse/%(append mabo3n/org-capture-work-item-last-id)\n"
-                  "#+OPTIONS: toc:nil num:nil author:nil\n\n")
+                  "#+OPTIONS: toc:nil num:nil author:nil\n"
+                  "#+PROPERTY: header-args+ :var customer_id=\"%\\1\" :var cusid=\"%\\1\"\n\n"
+                  "🔗 [[coppola:%\\1][Coppola]] / [[shuffle:%\\1][Shuffle]] / [[tristram:%\\1][Tristram]] / [[cia:%\\1][CIA]]\n\n%?")
          :immediate-finish nil :jump-to-captured t)
 
         ("p" "Templates for projects")
