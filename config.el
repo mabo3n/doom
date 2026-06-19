@@ -320,6 +320,35 @@
 
 (setq +evil-want-o/O-to-continue-comments nil)
 
+;; yasnippets stuff
+
+(defmacro mabo3n/yas-skip-on-preview (body &optional placeholder)
+  "Eval BODY, or return PLACEHOLDER when a snippet is being previewed.
+With no PLACEHOLDER, BODY's quoted source is shown as the preview text.
+
+Useful for wrapping side-effect-ful code in snippets which should only
+be triggered on insertion expansions - not preview ones.
+
+Relies on previewers following the proper convention like `consult-yasnippet'
+does: bind `yas-prompt-functions' to \='(yas-no-prompt) before previewing.
+
+Tip: for simple pick-an-option prompting inside snippets, use `yas-choose-value'
+so you don't need this wrapper."
+  `(if (equal yas-prompt-functions '(yas-no-prompt))
+       ,(or placeholder (format "%S" body))
+     ,body))
+
+;; Fix 'yasnippet-capf' not signaling when previewing snippets
+;; (when navigating autocomplete options)
+
+(after! yasnippet-capf
+  (defadvice! mabo3n/yas-silence-snippet-preview-a (fn &rest args)
+    "Bind the no-prompt convention around capf snippet doc previews."
+    :around #'yasnippet-capf--doc-buffer
+    (let ((yas-prompt-functions '(yas-no-prompt)) (yas-verbosity 0))
+      (apply fn args))))
+;; (advice-remove #'yasnippet-capf--doc-buffer #'mabo3n/yas-silence-snippet-preview-a)
+
 ;; lisp stuff
 
 ;; required to navigate SEXPs properly in normal mode
