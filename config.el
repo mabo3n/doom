@@ -320,6 +320,26 @@
 
 (setq +evil-want-o/O-to-continue-comments nil)
 
+;; shell stuff
+
+;; Name shells after the active workspace (*shell (<persp>)*, <2>, ...);
+;; with no workspace, return nil so `shell' keeps its own default (*shell*).
+(when (modulep! :ui workspaces)
+
+  (defun mabo3n/workspace-shell-name (&optional unique)
+    "Workspace `shell' name, or nil if none active; UNIQUE forces a fresh one."
+    (when-let ((ws (ignore-errors (+workspace-current-name))))
+      (let ((base (format "*shell (%s)*" ws)))
+        (if unique (generate-new-buffer-name base) base))))
+
+  (defadvice! mabo3n/shell-workspace-name-a (fn &optional buffer)
+    "Name `shell' buffers per workspace; prefix arg spawns an extra one."
+    :around #'shell
+    (interactive
+     (list (when current-prefix-arg
+             (read-buffer "Shell buffer: " (mabo3n/workspace-shell-name t)))))
+    (funcall fn (or buffer (mabo3n/workspace-shell-name)))))
+
 ;; yasnippets stuff
 
 (defmacro mabo3n/yas-skip-on-preview (body &optional placeholder)
