@@ -505,3 +505,38 @@ so you don't need this wrapper."
   (map! :map eca-chat-mode-map
         :g "C-c C-q" #'eca-chat-reset
         :g "C-c C-k" #'eca-chat-stop-prompt))
+
+(use-package! org-excalidraw
+  :after org
+  :config
+  (setq org-excalidraw-directory (expand-file-name "excalidraw/" mabo3n/zone-dir))
+  ;; Start the file-watcher once (regenerates the .svg on save). Guarded so
+  ;; reloads don't stack watchers (which would re-run the export N times).
+  (unless (bound-and-true-p mabo3n/org-excalidraw-initialized)
+    (org-excalidraw-initialize)
+    (setq mabo3n/org-excalidraw-initialized t))
+  ;; The plugin's excalidraw: link renders inline via :image-data-fun (from
+  ;; org-yt), which modern org lacks. file: links render inline natively and
+  ;; toggle with zi, so emit those; org-file-apps reopens the drawing in the app.
+  (defun mabo3n/org-excalidraw-create-drawing ()
+    "Create an excalidraw drawing and insert a file: link (renders inline)."
+    (interactive)
+    (let* ((filename (format "%s.excalidraw" (org-id-uuid)))
+           (path (expand-file-name filename org-excalidraw-directory)))
+      (org-excalidraw--validate-excalidraw-file path)
+      (insert (format "[[file:%s.svg]]" path))
+      (with-temp-file path (insert org-excalidraw-base))
+      (shell-command (org-excalidraw--shell-cmd-open path system-type))))
+  (advice-add 'org-excalidraw-create-drawing :override
+              #'mabo3n/org-excalidraw-create-drawing)
+  (add-to-list 'org-file-apps
+               '("\\.excalidraw\\.svg\\'" .
+                 (lambda (file _link) (org-excalidraw--open-file-from-svg file))))
+  ;; RET on a drawing opens it in the app to edit, instead of Doom's default
+  ;; (toggling the preview, since the path looks like an image). zi still toggles.
+  (define-advice +org/dwim-at-point (:around (fn &optional arg) mabo3n/org-excalidraw-edit-on-ret)
+    (let* ((link (org-element-lineage (org-element-context) '(link) t))
+           (path (and link (org-element-property :path link))))
+      (if (and path (string-suffix-p ".excalidraw.svg" path))
+          (org-open-at-point arg)
+        (funcall fn arg)))))

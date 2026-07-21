@@ -51,3 +51,4 @@
 
 (package! ox-gfm)
 (package! eca :recipe (:host github :repo "editor-code-assistant/eca-emacs" :files ("*.el")))
+(package! org-excalidraw :recipe (:host github :repo "wdavew/org-excalidraw"))
