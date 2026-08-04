@@ -321,6 +321,12 @@ then optionally a scope, and insert `type(scope): ' (or `type: ') at point."
 ;; Prevent cmd+t from opening a new workspace/perspective
 (map! "s-t" nil)
 
+;; LAMZU Atlantis side buttons report as mouse-3/mouse-4 instead of the usual
+;; mouse-8/mouse-9, so match browser-style back/forward navigation manually.
+(map! :map 'override
+      "<mouse-3>" #'better-jumper-jump-backward
+      "<mouse-4>" #'better-jumper-jump-forward)
+
 (map!
  (:map 'override
    :v "v" #'er/expand-region
