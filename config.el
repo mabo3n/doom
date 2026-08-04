@@ -557,10 +557,17 @@ so you don't need this wrapper."
   ;; The plugin's excalidraw: link renders inline via :image-data-fun (from
   ;; org-yt), which modern org lacks. file: links render inline natively and
   ;; toggle with zi, so emit those; org-file-apps reopens the drawing in the app.
+  ;; Doubles as the discoverable command (M-x mabo3n/org-excalidraw-create-drawing)
+  ;; and the :override behind the canonical `org-excalidraw-create-drawing'.
   (defun mabo3n/org-excalidraw-create-drawing ()
-    "Create an excalidraw drawing and insert a file: link (renders inline)."
+    "Create an excalidraw drawing and insert a file: link at point.
+Prompt for a name (default: a \"<timestamp>-.excalidraw\" you complete), open it
+in the excalidraw app, and render it inline via the file: link."
     (interactive)
-    (let* ((filename (format "%s.excalidraw" (org-id-uuid)))
+    (let* ((prefix (concat (format-time-string "%Y%m%d%H%M%S") "-"))
+           (filename (read-string
+                      "Drawing name: "
+                      (cons (concat prefix ".excalidraw") (1+ (length prefix)))))
            (path (expand-file-name filename org-excalidraw-directory)))
       (org-excalidraw--validate-excalidraw-file path)
       (insert (format "[[file:%s.svg]]" path))
