@@ -579,3 +579,64 @@ so you don't need this wrapper."
       (if (and path (string-suffix-p ".excalidraw.svg" path))
           (org-open-at-point arg)
         (funcall fn arg)))))
+
+;; Manage the drawing linked at point. A drawing is 3 things: the .excalidraw
+;; source, its .excalidraw.svg render, and the file: link. Keep them in sync.
+(defun mabo3n/org-excalidraw--link-at-point ()
+  "Return the excalidraw link element at point, or signal an error."
+  (let ((link (org-element-lineage (org-element-context) '(link) t)))
+    (unless (and link
+                 (let ((p (org-element-property :path link)))
+                   (and p (string-suffix-p ".excalidraw.svg" p))))
+      (user-error "Point is not on an excalidraw drawing link"))
+    link))
+
+(defun mabo3n/org-excalidraw-rename-at-point (new-name)
+  "Rename the drawing linked at point: source, svg, and the link.
+NEW-NAME is the new .excalidraw base filename; it stays in the same directory."
+  (interactive
+   (let* ((link (mabo3n/org-excalidraw--link-at-point))
+          (cur (file-name-nondirectory
+                (string-remove-suffix ".svg" (org-element-property :path link)))))
+     (list (read-string "New name: " cur))))
+  (unless (string-suffix-p ".excalidraw" new-name)
+    (user-error "Name must end in .excalidraw"))
+  (let* ((link (mabo3n/org-excalidraw--link-at-point))
+         (raw-svg (org-element-property :path link))
+         (raw-src (string-remove-suffix ".svg" raw-svg))
+         (dir (file-name-directory raw-src))
+         (new-src (concat dir new-name))
+         (new-svg (concat new-src ".svg")))
+    ;; svg first: renaming the source fires the watcher's re-export, which would
+    ;; recreate new-svg and clash with a source-first rename.
+    (when (file-exists-p (expand-file-name raw-svg))
+      (rename-file (expand-file-name raw-svg) (expand-file-name new-svg)))
+    (when (file-exists-p (expand-file-name raw-src))
+      (rename-file (expand-file-name raw-src) (expand-file-name new-src)))
+    (save-excursion
+      (goto-char (org-element-property :begin link))
+      (when (search-forward raw-svg (org-element-property :end link) t)
+        (replace-match new-svg t t)))
+    (message "Renamed drawing to %s" new-name)))
+
+(defun mabo3n/org-excalidraw-delete-at-point ()
+  "Delete the drawing linked at point: source, svg, and the link line."
+  (interactive)
+  (let* ((link (mabo3n/org-excalidraw--link-at-point))
+         (raw-svg (org-element-property :path link))
+         (raw-src (string-remove-suffix ".svg" raw-svg)))
+    (when (yes-or-no-p (format "Delete drawing %s and its link? "
+                               (file-name-nondirectory raw-src)))
+      (when (file-exists-p (expand-file-name raw-src))
+        (delete-file (expand-file-name raw-src)))
+      (when (file-exists-p (expand-file-name raw-svg))
+        (delete-file (expand-file-name raw-svg)))
+      (let ((beg (org-element-property :begin link))
+            (end (- (org-element-property :end link)
+                    (or (org-element-property :post-blank link) 0))))
+        (delete-region beg end)
+        (when (string-blank-p (buffer-substring (line-beginning-position)
+                                                (line-end-position)))
+          (delete-region (line-beginning-position)
+                         (min (point-max) (1+ (line-end-position))))))
+      (message "Deleted drawing %s" (file-name-nondirectory raw-src)))))
