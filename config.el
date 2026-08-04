@@ -187,6 +187,39 @@
   (setq git-commit-style-convention-checks (cl-remove 'overlong-summary-line
                                              git-commit-style-convention-checks)))
 
+;; conventional commits stuff
+
+(defconst mabo3n/conventional-commit-types
+  '(("feat"     . "A new feature for the user")
+    ("fix"      . "A bug fix for the user")
+    ("docs"     . "Documentation only changes")
+    ("style"    . "Formatting only: whitespace, semicolons, etc (no code meaning change)")
+    ("refactor" . "Code change that neither fixes a bug nor adds a feature")
+    ("perf"     . "Code change that improves performance")
+    ("test"     . "Adding missing tests or correcting existing ones")
+    ("build"    . "Changes to the build system or external dependencies")
+    ("ci"       . "Changes to CI configuration files and scripts")
+    ("chore"    . "Other changes that don't modify src or test files (tooling, deps bump, etc)")
+    ("revert"   . "Reverts a previous commit"))
+  "Conventional Commits type tags and their descriptions.")
+
+(defun mabo3n/conventional-commit-type-annotate (type)
+  "Return an annotation string with TYPE's description, for `completing-read'."
+  (when-let ((desc (cdr (assoc type mabo3n/conventional-commit-types))))
+    (concat (propertize " " 'display '(space :align-to 14))
+            (propertize desc 'face 'completions-annotations))))
+
+(defun mabo3n/start-conventional-commit-msg ()
+  "Prompt for a Conventional Commits type (annotated with its description),
+then optionally a scope, and insert `type(scope): ' (or `type: ') at point."
+  (interactive)
+  (let* ((completion-extra-properties
+          '(:annotation-function mabo3n/conventional-commit-type-annotate))
+         (type (completing-read "Commit type: " mabo3n/conventional-commit-types nil t))
+         (scope (string-trim (read-string "Scope (optional): "))))
+    (insert (format "%s%s: " type (if (string-empty-p scope) "" (format "(%s)" scope))))))
+
+
 (after! projectile
   (let ((repos-path (concat mabo3n/home-dir "repos")))
     (setq projectile-project-search-path `(,repos-path
