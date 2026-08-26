@@ -227,6 +227,16 @@ then optionally a scope, and insert `type(scope): ' (or `type: ') at point."
                                            (,repos-path . 2)
                                            (,repos-path . 3)))))
 
+(defvar mabo3n/zone-sync-commit-failure-handler nil
+  "Function to try recovering a blocked `git commit' in `mabo3n/zone-sync'.
+Called with the process output string; return non-nil to retry the commit.")
+
+(defun mabo3n/zone-sync--commit (msg)
+  "Run `git commit -m MSG --no-gpg-sign', returning (EXIT-CODE . OUTPUT)."
+  (with-temp-buffer
+    (cons (call-process "git" nil t nil "commit" "-m" msg "--no-gpg-sign")
+          (buffer-string))))
+
 (defun mabo3n/zone-sync (&optional arg)
   "Sync `mabo3n/zone-dir', or prompt for zone if ARG is non-nil."
   (interactive "P")
@@ -251,11 +261,18 @@ then optionally a scope, and insert `type(scope): ' (or `type: ') at point."
     ;; Commit and push
     (if (magit-anything-staged-p)
         (progn
-          ;; Commit
-
-          (magit-with-editor
-            (unless (zerop (magit-call-git "commit" "-m" msg "--no-gpg-sign"))
-             (user-error "🚫 Commit failed")))
+          ;; Commit, retrying via `mabo3n/zone-sync-commit-failure-handler' if blocked
+          (let ((attempts 0) result)
+            (setq result (mabo3n/zone-sync--commit msg))
+            (while (and (not (zerop (car result)))
+                        (< attempts 3)
+                        (functionp mabo3n/zone-sync-commit-failure-handler)
+                        (funcall mabo3n/zone-sync-commit-failure-handler (cdr result)))
+              (setq attempts (1+ attempts))
+              (setq result (mabo3n/zone-sync--commit msg)))
+            (unless (zerop (car result))
+              (message "%s" (cdr result))
+              (user-error "🚫 Commit failed")))
 
           ;; Push
           (message "Pushing to origin...")
@@ -533,7 +550,12 @@ so you don't need this wrapper."
     (when (file-directory-p nudev-emacs-path)
       (add-to-list 'load-path nudev-emacs-path)
       (require 'nu nil t)
-      (require 'nu-datomic-query nil t))))
+      (require 'nu-datomic-query nil t)))
+
+  ;; `zone-sync' hits Nu's git-dlp pre-commit hook on false positives (e.g.
+  ;; excalidraw internals). Handle those interactively instead of failing.
+  (load! "lisp/init-nu-git-dlp")
+  (setq mabo3n/zone-sync-commit-failure-handler #'mabo3n/git-dlp-interactive-exempt))
 
 ;; resize font & frame (might raise error on config hot-reload)
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
