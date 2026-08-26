@@ -152,6 +152,12 @@ If `current-prefix-arg', `dired' to `mabo3n/org-capture-work-items-dir-path'."
         ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :clock-resume t :kill-buffer t)
         ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :clock-resume t)))
 
+;; Easier-to-type inactive timestamp binding, mirroring the native
+;; `org-time-stamp' (C-c .) prefix-arg behavior (C-u prompts for time,
+;; C-u C-u inserts with current time) but inactive.
+(map! :map org-mode-map
+      :desc "Insert inactive timestamp" "C-c C-." #'org-time-stamp-inactive)
+
 ;; Resetting `[ ]' keybindings to match the char inside the brackets
 (after! org
   (setq org-todo-keywords
