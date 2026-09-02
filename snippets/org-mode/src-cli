@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: src cli
+# key: srcli
+# --
+
+#+begin_src sh :results output
+${1:nu}$0 --env=prod
+#+end_src
